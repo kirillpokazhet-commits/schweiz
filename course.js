@@ -783,3 +783,142 @@ const finalTest = [
   ["Я хочу учить немецкий. (используй wollen)", "Ich will Deutsch lernen", "Will спрягается, lernen остаётся в конце.", "translate"],
   ["Исправь вспомогательный глагол: Wir haben zu Fuss gekommen.", "Wir sind zu Fuss gekommen", "Kommen образует Perfekt с sein. С wir — sind.", "fix"]
 ];
+
+course[2].theory.push([
+  "Как заказать и уточнить количество",
+  "Начни с Ich möchte …, bitte. Если продавец спрашивает Wie viele?, он хочет знать, сколько штук. Wie viel? подходит для цены или количества того, что измеряют, например молока.",
+  "Ich möchte zwei Brötchen, bitte. Wie viel kostet das?"
+]);
+course[4].theory.push([
+  "Читаем табло на вокзале",
+  "Wann? спрашивает «когда?», а Von welchem Gleis? — «с какого пути?». Запомни ответ von Gleis zwei целиком. У abfahren приставка ab уходит в конец: Der Zug fährt um zehn Uhr ab.",
+  "Wann fährt der Zug ab? Um zehn Uhr, von Gleis zwei."
+]);
+course[6].theory.push([
+  "Как предупредить школу",
+  "В начале звонка можно назвать своё имя: Hier ist … Затем скажи, кто заболел, и что сегодня он не придёт. Готовые кусочки можно менять: mein Sohn, meine Tochter, in die Schule, in den Deutschkurs.",
+  "Guten Morgen. Hier ist Anna Keller. Meine Tochter ist krank. Sie kann heute nicht kommen."
+]);
+
+// Map each exercise to the explanation that helps with its likely mistake.
+const practiceRules = [
+  [1, 1, 0, 1, 2, 0, 3, 0],
+  [0, 2, 1, 2, 2, 3, 3, 4],
+  [0, 1, 3, 1, 2, 2, 2, 3],
+  [0, 1, 2, 2, 1, 2, 3, 2],
+  [2, 1, 0, 3, 0, 0, 1, 4],
+  [0, 1, 3, 2, 3, 2, 0, 2],
+  [0, 0, 1, 2, 0, 2, 1, 2]
+];
+const testRules = [4, 0, 1, 4, 3, 1, 1, 3, 5, 7, 2, 3, 5, 6];
+const questionRules = new Map([
+  ...course.flatMap((lesson, index) => lesson.practice.map((question, position) => [question, lesson.theory[practiceRules[index][position]]])),
+  ...finalTest.map((question, index) => [question, grammarReview[testRules[index]]])
+]);
+
+const uznachScenes = [
+  {
+    id: "bakery", title: "В пекарне", goal: "Закажи булочки или кофе и узнай цену.",
+    speaker: "Продавец",
+    steps: {
+      start: {
+        line: "Grüezi! Was möchten Sie?",
+        task: ["Выбери, что закажешь.", "Ich möchte Brötchen, bitte.", "Ich möchte — вежливая просьба. После möchte скажи, что хочешь, а в конце можно добавить bitte.", "choice", [
+          "Ich möchten Kaffee, bitte.", "Ich möchte Brötchen, bitte.", "Ich möchte Kaffee, bitte."
+        ]],
+        branches: { "Ich möchte Brötchen, bitte.": "rolls", "Ich möchte Kaffee, bitte.": "coffee" },
+        rule: course[2].theory[3]
+      },
+      rolls: {
+        line: "Wie viele Brötchen möchten Sie?",
+        task: ["Закажи две булочки. Вставь число словами: Ich möchte ___ Brötchen.", "zwei", "Wie viele? спрашивает о количестве штук. Zwei Brötchen — две булочки.", "gap"],
+        next: "rollPrice", rule: course[2].theory[4]
+      },
+      coffee: {
+        line: "Möchten Sie Milch zum Kaffee?",
+        task: ["Собери фразу «Да, с молоком, пожалуйста».", "Ja mit Milch bitte", "Mit значит «с». В живой речи здесь достаточно короткого ответа: Ja, mit Milch, bitte.", "order", ["Milch", "bitte", "Ja", "mit"]],
+        next: "coffeePrice", rule: course[2].theory[3]
+      },
+      rollPrice: {
+        line: "Gern. Sonst noch etwas?",
+        task: ["Спроси «Сколько это стоит?».", "Wie viel kostet das?", "Wie viel спрашивает о цене. После него идёт kostet, а затем das.", "choice", ["Wie viele kostet das?", "Wie viel kostet das?", "Wo kostet das?"]],
+        next: "rollEnd", rule: course[2].theory[4]
+      },
+      coffeePrice: {
+        line: "Der Kaffee kostet vier Franken.",
+        task: ["Запиши цену словами: Der Kaffee kostet ___ Franken.", "vier", "Vier — четыре. После kostet можно назвать число и валюту.", "gap"],
+        next: "coffeeEnd", rule: course[2].theory[2]
+      },
+      rollEnd: { line: "Zwei Franken, bitte. En Guete!", result: "Ты заказал две булочки и узнал цену. En Guete! — швейцарское пожелание приятного аппетита." },
+      coffeeEnd: { line: "Bitte schön, Ihr Kaffee!", result: "Ты заказал кофе, ответил на вопрос о молоке и разобрал цену." }
+    }
+  },
+  {
+    id: "station", title: "На вокзале", goal: "Уточни время отправления или найди путь к поезду.",
+    speaker: "Сотрудник вокзала",
+    steps: {
+      start: {
+        line: "Guten Tag! Wie kann ich Ihnen helfen?",
+        task: ["Выбери, что хочешь узнать о поезде до Рапперсвиля.", "Wann fährt der Zug nach Rapperswil ab?", "Wann спрашивает «когда?», а Von welchem Gleis? — «с какого пути?». В вопросе с abfahren приставка ab остаётся в конце.", "choice", [
+          "Von welchem Gleis fährt der Zug nach Rapperswil?", "Wann der Zug nach Rapperswil abfährt?", "Wann fährt der Zug nach Rapperswil ab?"
+        ]],
+        branches: { "Wann fährt der Zug nach Rapperswil ab?": "time", "Von welchem Gleis fährt der Zug nach Rapperswil?": "platform" },
+        rule: course[4].theory[5]
+      },
+      time: {
+        line: "Der Zug fährt um halb zehn ab.",
+        task: ["Какое время назвал сотрудник?", "09:30", "Halb zehn — половина десятого, то есть 09:30.", "choice", ["10:30", "09:30", "09:45"]],
+        next: "askPlatform", rule: course[4].theory[2]
+      },
+      platform: {
+        line: "Ihr Zug fährt von Gleis zwei.",
+        task: ["Подтверди номер пути. Собери «С пути два?».", "Von Gleis zwei", "В ответах на вокзале пригодится готовый кусочек von Gleis … — с пути номер…", "order", ["zwei", "Von", "Gleis"]],
+        next: "askTime", rule: course[4].theory[5]
+      },
+      askPlatform: {
+        line: "Möchten Sie noch etwas wissen?",
+        task: ["Вставь «путь»: Von welchem ___ fährt der Zug?", "Gleis", "Gleis — путь у платформы. Von welchem Gleis? — с какого пути?", "gap"],
+        next: "platformEnd", rule: course[4].theory[5]
+      },
+      askTime: {
+        line: "Möchten Sie noch etwas wissen?",
+        task: ["Собери вопрос «Когда отправляется поезд?».", "Wann fährt der Zug ab", "Wann идёт первым, fährt — вторым, а приставка ab — в конце.", "order", ["der Zug", "ab", "Wann", "fährt"]],
+        next: "timeEnd", rule: course[4].theory[0]
+      },
+      platformEnd: { line: "Von Gleis zwei. Gute Fahrt!", result: "Ты уточнил время отправления и номер пути." },
+      timeEnd: { line: "Um halb zehn. Gute Fahrt!", result: "Ты нашёл нужный путь и уточнил время отправления." }
+    }
+  },
+  {
+    id: "school", title: "Звонок в школу", goal: "Сообщи, что ребёнок заболел и сегодня не придёт.",
+    speaker: "Секретарь школы",
+    steps: {
+      start: {
+        line: "Sekretariat, guten Morgen. Wie kann ich Ihnen helfen?",
+        task: ["Выбери, что скажешь про ребёнка.", "Meine Tochter ist krank.", "Tochter — женский род, поэтому meine. Sohn — мужской, поэтому mein.", "choice", [
+          "Meine Tochter ist krank.", "Meine Sohn ist krank.", "Mein Sohn ist krank."
+        ]],
+        branches: { "Meine Tochter ist krank.": "daughter", "Mein Sohn ist krank.": "son" },
+        rule: course[1].theory[0]
+      },
+      daughter: {
+        line: "Kann Ihre Tochter heute in die Schule kommen?",
+        task: ["Собери «Она сегодня не может прийти».", "Sie kann heute nicht kommen", "Kann стоит после Sie, kommen уходит в конец. Nicht отрицает, что она может прийти сегодня.", "order", ["kommen", "heute", "Sie", "nicht", "kann"]],
+        next: "surname", rule: course[6].theory[0]
+      },
+      son: {
+        line: "Kann Ihr Sohn heute in die Schule kommen?",
+        task: ["Вставь форму «мочь»: Er ___ heute nicht kommen.", "kann", "С er, как и с ich, используем kann. Второй глагол остаётся в начальной форме: kommen.", "gap"],
+        next: "surname", rule: course[6].theory[0]
+      },
+      surname: {
+        line: "Wie ist der Nachname, bitte?",
+        task: ["Как ответить «Фамилия — Келлер»?", "Der Nachname ist Keller.", "Nachname — фамилия, Vorname — имя. Когда просят только фамилию, достаточно её назвать.", "choice", [
+          "Der Vorname ist Keller.", "Der Nachname ist Keller.", "Woher kommen Sie?"
+        ]],
+        next: "end", rule: course[6].theory[4]
+      },
+      end: { line: "Danke für den Anruf. Gute Besserung!", result: "Ты предупредил школу. Gute Besserung! значит «Выздоравливай!»." }
+    }
+  }
+];

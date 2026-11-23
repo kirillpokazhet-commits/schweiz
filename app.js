@@ -1,5 +1,5 @@
 const elements = Object.fromEntries(
-  ["overview", "lesson-view", "lessons", "progress", "percent", "completed", "hero", "sections", "content", "storage-message", "audio-status"]
+  ["overview", "lesson-view", "lessons", "progress", "percent", "completed", "due-count", "hero", "sections", "content", "storage-message", "audio-status"]
     .map(id => [id, document.getElementById(id)])
 );
 const labels = { theory: "Теория", words: "Слова", practice: "Тренировка", grammar: "Грамматика", test: "Тест A1.1" };
@@ -7,7 +7,7 @@ const day = 86_400_000;
 const minute = 60_000;
 const ratings = { again: "Снова", hard: "Трудно", good: "Хорошо", easy: "Легко" };
 const storageKey = "deutsch-a11.v2";
-let saved = { theory: {}, cards: {}, practice: {}, bestTest: null };
+let saved = { theory: {}, cards: {}, practice: {}, bestTest: null, scenes: {} };
 let view;
 let study;
 let reviewTimer;
@@ -76,7 +76,11 @@ function parseBackup(contents) {
     if (Number.isSafeInteger(card.interval) && card.interval > 0) cards[key].interval = card.interval;
     else cards[key].level = card.level;
   }
-  return { theory: progress.theory, practice: progress.practice, cards, bestTest: progress.bestTest };
+  const scenes = progress.scenes ?? {};
+  if (!isRecord(scenes) || Object.entries(scenes).some(([id, done]) =>
+    !uznachScenes.some(scene => scene.id === id) || done !== true
+  )) throw new Error("Неверный прогресс прогулки");
+  return { theory: progress.theory, practice: progress.practice, cards, bestTest: progress.bestTest, scenes };
 }
 
 document.getElementById("export-progress").addEventListener("click", () => {
@@ -182,25 +186,29 @@ function renderNavigation() {
   elements.progress.max = max;
   elements.progress.value = count;
   elements.percent.textContent = `${Math.round(count / max * 100)}%`;
-  elements.completed.textContent = `${count} из ${max} разделов · К повторению ${due}`;
+  elements.completed.textContent = `${count} из ${max} разделов`;
+  elements["due-count"].textContent = due;
   if (!view.home) return;
+  const completedScenes = uznachScenes.filter(scene => saved.scenes[scene.id]).length;
+  document.getElementById("uznach-count").textContent =
+    completedScenes ? `Сцены пройдены: ${completedScenes} из ${uznachScenes.length}` : "Три разговора на немецком";
   elements.lessons.innerHTML = course.map(lesson => {
     const learned = wordsFor(lesson).filter(card => saved.cards[card.key]?.learned).length;
     const score = saved.practice[lesson.id];
     const max = 1 + lesson.words.length + lesson.practice.length;
     const value = Number(Boolean(saved.theory[lesson.id])) + learned + (score ?? 0);
     return `<a class="lesson" href="#${lesson.id}">
-      <span class="number">${lesson.id}</span>
+      <span class="number">${String(lesson.id).padStart(2, "0")}</span>
       <span class="lesson-info"><strong>${lesson.title}</strong>
         <span class="lesson-bar" aria-hidden="true"><span style="width:${value / max * 100}%"></span></span>
         <small>Слова ${learned}/${lesson.words.length} · тренировка ${score ?? "—"}/${lesson.practice.length}</small>
-      </span>
+      </span><span class="row-marker" aria-hidden="true"></span>
     </a>`;
   }).join("") + `<a class="lesson lesson-final" href="#final">
       <span class="number" aria-hidden="true">✓</span>
       <span class="lesson-info"><strong>Итоги A1.1</strong>
-        <small>${saved.bestTest === null ? "Слова, тренировки, грамматика и тест" : `Лучший результат теста ${saved.bestTest}/${finalTest.length}`}</small>
-      </span>
+        <small>${saved.bestTest === null ? "Тренировки, грамматика и тест" : `Лучший результат теста ${saved.bestTest}/${finalTest.length}`}</small>
+      </span><span class="row-marker" aria-hidden="true"></span>
     </a>`;
 }
 
@@ -208,21 +216,47 @@ function readRoute() {
   clearTimeout(reviewTimer);
   const [id, section] = location.hash.slice(1).split("/");
   const lesson = course.find(item => String(item.id) === id);
-  const final = id === "final";
-  const home = !final && !lesson;
-  const tabs = final ? ["words", "practice", "grammar", "test"] : ["theory", "words", "practice"];
+  const globalWords = id === "words" || (id === "final" && section === "words");
+  const final = id === "final" && !globalWords;
+  const uznach = id === "uznach";
+  const home = !final && !lesson && !uznach && !globalWords;
+  const tabs = final ? ["practice", "grammar", "test"] : ["theory", "words", "practice"];
   view = {
-    id: final ? "final" : lesson ? String(lesson.id) : "home",
+    id: globalWords ? "words" : final ? "final" : lesson ? String(lesson.id) : "home",
     section: tabs.includes(section) ? section : tabs[0],
-    lesson, final, home
+    lesson, final, home, globalWords
   };
   elements.overview.hidden = !home;
+  elements.hero.classList.toggle("home-hero", home);
   elements["lesson-view"].hidden = home;
+  elements.sections.hidden = uznach || globalWords;
   elements["audio-status"].textContent = "";
   study = null;
   renderNavigation();
   if (home) {
-    elements.hero.innerHTML = `<h1>Deutsch A1.1</h1><p>${course.length} лекций и итоговый тест</p>`;
+    elements.hero.innerHTML = `<h1>Deutsch <span>A1.1</span></h1><p>${course.length} лекций и итоговый тест</p>`;
+    return;
+  }
+  if (globalWords) {
+    elements.hero.innerHTML = '<a class="home-link" href="#home">Главная</a><h1 id="section-title">Учить слова</h1>';
+    openWords();
+    return;
+  }
+  if (uznach) {
+    const scene = uznachScenes.find(item => item.id === section);
+    elements.hero.innerHTML = `<a class="home-link" href="${scene ? "#uznach" : "#home"}">${scene ? "К маршруту" : "Главная"}</a><h1>День в Уцнахе</h1>`;
+    if (scene) {
+      study = { scene, answers: [], order: [], index: 0, streak: 0, bestStreak: 0 };
+      openSceneStep("start");
+    } else {
+      show("Маршрут", "Выбери, где хочешь поговорить по-немецки.", `
+        <ol class="scene-list">${uznachScenes.map(scene => `
+          <li><a href="#uznach/${scene.id}">
+            <div><strong>${scene.title}</strong><p>${scene.goal}</p>
+            ${saved.scenes[scene.id] ? "<small>Пройдено</small>" : ""}</div>
+            <span class="row-marker" aria-hidden="true"></span>
+          </a></li>`).join("")}</ol>`);
+    }
     return;
   }
   elements.hero.innerHTML = `
@@ -242,6 +276,39 @@ function readRoute() {
 function show(title, subtitle, body) {
   elements.content.innerHTML = `
     <header class="section-head"><h2 id="section-title">${title}</h2><p>${subtitle}</p></header>${body}`;
+}
+
+function sceneLine(scene, line) {
+  return `<div class="scene-line"><small>${scene.speaker}</small>
+    <div><strong lang="de-CH">${line}</strong>${audioButton()}</div></div>`;
+}
+
+function openSceneStep(id) {
+  const scene = study.scene;
+  const step = scene.steps[id];
+  study.step = step;
+  study.feedback = null;
+  study.order = [];
+  if (step.result) {
+    saved.scenes[scene.id] = true;
+    persist();
+    show("Разговор завершён", step.result, `
+      ${sceneLine(scene, step.line)}
+      <div class="actions"><a class="button primary" href="#uznach">К маршруту</a>
+        <button data-action="scene-restart">Сыграть ещё раз</button></div>`);
+    elements.content.querySelector("a").focus();
+    return;
+  }
+  study.questions = [step.task];
+  renderQuestion();
+}
+
+function errorRule(question, rule = questionRules.get(question)) {
+  return `<div class="error-rule">
+    <strong>Правило</strong><p>${question[2]}</p>
+    ${rule ? `<details><summary>${rule[0]}</summary><p>${rule[1]}</p>
+      <div class="example"><span lang="de-CH">${rule[2]}</span>${audioButton()}</div></details>` : ""}
+  </div>`;
 }
 
 function theoryCards(items) {
@@ -267,15 +334,24 @@ function renderTheory() {
     </div>`;
 }
 
-function openWords(freeReview = false) {
+function shuffleCards(cards) {
+  const shuffled = [...cards];
+  for (let index = shuffled.length - 1; index > 0; index--) {
+    const other = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[other]] = [shuffled[other], shuffled[index]];
+  }
+  return shuffled;
+}
+
+function openWords(freeReview = !view.globalWords) {
   clearTimeout(reviewTimer);
-  const cards = (view.final ? course : [view.lesson]).flatMap(wordsFor);
+  const cards = (view.globalWords ? course : [view.lesson]).flatMap(wordsFor);
   const now = Date.now();
   const due = cards.filter(card => saved.cards[card.key]?.due <= now)
     .sort((first, second) => saved.cards[first.key].due - saved.cards[second.key].due);
   const fresh = cards.filter(card => !saved.cards[card.key]);
   study = {
-    cards, queue: freeReview ? [...cards] : [...due, ...fresh.slice(0, 12)],
+    cards, queue: freeReview ? shuffleCards(cards) : [...due, ...fresh.slice(0, 12)],
     reviewed: 0, revealed: false, freeReview
   };
   renderWords();
@@ -312,12 +388,14 @@ function renderWords() {
   const delays = card && reviewDelays(card);
   const list = study.cards.map(item => `
     <dt><span lang="de-CH">${item.word}</span>${audioButton()}</dt><dd>${item.translation}</dd>`).join("");
+  const viewed = study.cards.length - study.queue.length;
+  const counter = study.freeReview ? `${viewed + 1} из ${study.cards.length}` : `В очереди ${study.queue.length}`;
   const panel = card ? `
     <div class="panel">
-      <div class="spread"><strong>Карточка</strong><small>В очереди ${study.queue.length}</small></div>
+      <div class="spread"><strong>Карточка</strong><small>${counter}</small></div>
       <div class="panel flashcard">
         <div><h3 lang="de-CH">${card.word}</h3>${audioButton()}</div>
-        <p aria-live="polite">${study.revealed ? card.translation : "Вспомни перевод"}</p>
+        <p class="${study.revealed ? "translation" : "muted"}" aria-live="polite">${study.revealed ? card.translation : "Вспомни перевод"}</p>
       </div>
       <div class="actions">${study.revealed ? study.freeReview
         ? '<button class="primary" data-action="next-card">Следующая карточка</button>'
@@ -330,13 +408,19 @@ function renderWords() {
     <div class="panel"><h3>${study.freeReview ? "Свободное повторение завершено" : newCount ? "Подход завершён" : "Сейчас очередь пуста"}</h3>
     ${study.reviewed ? `<p>Оценок за подход: ${study.reviewed}.</p>` : ""}
     ${!study.freeReview && newCount ? `<p>Новых карточек осталось: ${newCount}.</p>` : ""}
-    ${Number.isFinite(nextDue) ? `<p>По расписанию: ${nextDue <= now ? "есть карточки к повторению" : formatReviewDelay(nextDue - now)}.</p>` : ""}
+    ${view.globalWords && Number.isFinite(nextDue) ? `<p>По расписанию: ${nextDue <= now ? "есть карточки к повторению" : formatReviewDelay(nextDue - now)}.</p>` : ""}
     <div class="actions">
       ${!study.freeReview && newCount ? '<button class="primary" data-action="scheduled-words">Следующая порция</button>' : ""}
-      <button data-action="${study.freeReview ? "scheduled-words" : "all-words"}">${study.freeReview ? "К расписанию" : "Повторить все вне расписания"}</button>
+      ${view.globalWords
+        ? `<button data-action="${study.freeReview ? "scheduled-words" : "all-words"}">${study.freeReview ? "К расписанию" : "Повторить все вне расписания"}</button>`
+        : '<button class="primary" data-action="all-words">Перемешать и повторить</button><a class="button" href="#words">Учить по расписанию</a>'}
     </div></div>`;
-  show(view.final ? "Слова всех лекций" : "Слова", `${study.freeReview ? "Свободное повторение" : "Интервальное повторение"} · ${study.cards.length} слов и выражений`,
-    `${panel}<details class="panel"><summary>Список слов</summary><dl>${list}</dl></details>`);
+  const description = view.globalWords
+    ? `${study.freeReview ? "Свободное повторение" : "Интервальное повторение"} · ${study.cards.length} слов и выражений`
+    : `${study.cards.length} карточек этой лекции в случайном порядке. Даты повторений не меняются.`;
+  const dictionary = `<details class="panel"><summary>Список слов</summary><dl>${list}</dl></details>`;
+  if (view.globalWords) elements.content.innerHTML = `<p class="words-intro muted">${description}</p>${panel}${dictionary}`;
+  else show("Слова лекции", description, `${panel}${dictionary}`);
 }
 
 function gradeCard(rating) {
@@ -374,7 +458,10 @@ function openPractice() {
 
 function renderQuestion() {
   const { test, questions, index, feedback } = study;
-  const [prompt, answer, explanation, type = "translate", options] = questions[index];
+  const question = questions[index];
+  const [prompt, answer, explanation, type = "translate", options] = question;
+  const scene = study.scene;
+  const displayedAnswer = scene && feedback?.correct && study.step.branches ? feedback.value : answer;
   const formats = { translate: "Перевод", choice: "Выбор ответа", gap: "Пропуск", order: "Порядок слов", fix: "Исправление ошибки", listen: "Диктант" };
   const submit = `<div class="actions"><button class="primary" type="submit">${test ? "Далее" : "Проверить"}</button></div>`;
   let fields = `<label for="answer">${type === "gap" ? "Пропущенное слово" : "Ответ по-немецки"}</label>
@@ -398,9 +485,10 @@ function renderQuestion() {
         <button type="button" lang="de-CH" data-action="add-word" data-position="${position}"
           ${study.order.includes(position) ? "disabled" : ""}>${option}</button>`).join("")}</div>`;
   }
-  show(test ? "Тест A1.1" : study.review ? "Работа над ошибками" : "Тренировка",
-    `Задание ${index + 1} из ${questions.length} · ${formats[type]}`, `
-    ${test ? "" : `<div class="practice-progress">
+  show(scene?.title || (test ? "Тест A1.1" : study.review ? "Работа над ошибками" : "Тренировка"),
+    scene ? scene.goal : `Задание ${index + 1} из ${questions.length} · ${formats[type]}`, `
+    ${scene ? sceneLine(scene, study.step.line) : ""}
+    ${test || scene ? "" : `<div class="practice-progress">
       <progress value="${study.answers.length}" max="${questions.length}" aria-label="Задания с ответом"></progress>
       <small aria-live="polite">Верных подряд: ${study.streak}</small>
     </div>`}
@@ -409,9 +497,11 @@ function renderQuestion() {
       ${feedback ? `
         <div class="feedback" role="status">
           <strong class="${feedback.correct ? "good" : "wrong"}">${feedback.correct ? "Верно" : "Проверь этот вариант"}</strong>
-          <p><span lang="de-CH">${answer}</span>${audioButton()}</p><p>${explanation}</p>
+          ${!feedback.correct ? `<p>Твой ответ: <span>${escapeHTML(feedback.value)}</span></p>` : ""}
+          <p><span lang="de-CH">${displayedAnswer}</span>${audioButton()}</p>
+          ${feedback.correct ? `<p>${explanation}</p>` : errorRule(question, scene ? study.step.rule : undefined)}
         </div>
-        <div class="actions"><button class="primary" data-action="next">${index + 1 === questions.length ? "Результат" : "Следующее задание"}</button></div>`
+        <div class="actions"><button class="primary" data-action="next">${scene ? feedback.correct ? "Продолжить разговор" : "Попробовать ещё раз" : index + 1 === questions.length ? "Результат" : "Следующее задание"}</button></div>`
         : `<form id="answer-form">${fields}${type === "order" && study.order.length !== options.length ? "" : submit}</form>`}
     </div>`);
 }
@@ -447,10 +537,11 @@ function advance() {
   persist();
   const mistakes = study.answers.map((result, index) => {
     if (result.correct) return "";
-    const [prompt, answer, explanation] = study.questions[index];
+    const question = study.questions[index];
+    const [prompt, answer] = question;
     return `<article class="panel"><h3>${prompt}</h3>
       <p>Твой ответ: <span lang="de-CH">${escapeHTML(result.value)}</span></p>
-      <p>Вариант ответа: <strong lang="de-CH">${answer}</strong>${audioButton()}</p><p>${explanation}</p></article>`;
+      <p>Вариант ответа: <strong lang="de-CH">${answer}</strong>${audioButton()}</p>${errorRule(question)}</article>`;
   }).join("");
   const streak = study.test ? "" : ` · Лучшая серия: ${study.bestStreak}`;
   show("Результат", `Верных ответов: ${score} из ${study.questions.length}${streak}`, `
@@ -482,7 +573,8 @@ elements.content.addEventListener("submit", event => {
     input.reportValidity();
     return;
   }
-  const result = { value, correct: normalize(value) === normalize(expected) };
+  const branches = study.scene && study.step.branches;
+  const result = { value, correct: branches ? Object.hasOwn(branches, value) : normalize(value) === normalize(expected) };
   study.answers.push(result);
   if (study.test) advance();
   else {
@@ -490,7 +582,7 @@ elements.content.addEventListener("submit", event => {
     study.bestStreak = Math.max(study.bestStreak, study.streak);
     study.feedback = result;
     renderQuestion();
-    elements.content.querySelector("button").focus();
+    elements.content.querySelector("[data-action='next']").focus();
   }
 });
 
@@ -530,10 +622,26 @@ elements.content.addEventListener("click", event => {
       study.queue.shift();
       study.revealed = false;
       renderWords();
-      elements.content.querySelector("[data-action='reveal'], [data-action='scheduled-words']").focus();
+      elements.content.querySelector("[data-action='reveal'], [data-action='scheduled-words'], [data-action='all-words']").focus();
       break;
     case "start": renderQuestion(); elements.content.querySelector("form input, form button").focus(); break;
-    case "next": advance(); break;
+    case "next":
+      if (study.scene) {
+        if (study.feedback.correct) {
+          openSceneStep(study.step.branches?.[study.feedback.value] ?? study.step.next);
+        } else {
+          study.feedback = null;
+          study.order = [];
+          renderQuestion();
+        }
+        elements.content.querySelector("#answer-form input, #answer-form button")?.focus();
+      } else advance();
+      break;
+    case "scene-restart":
+      study.answers = [];
+      openSceneStep("start");
+      elements.content.querySelector("#answer-form input").focus();
+      break;
     case "retry": openPractice(); break;
     case "retry-mistakes": {
       const questions = study.questions.filter((_, index) => !study.answers[index].correct);
@@ -545,11 +653,18 @@ elements.content.addEventListener("click", event => {
   }
 });
 
-window.addEventListener("hashchange", () => {
+function navigate() {
   readRoute();
   window.scrollTo(0, 0);
   const heading = elements.hero.querySelector("h1");
   heading.tabIndex = -1;
   heading.focus({ preventScroll: true });
+}
+window.addEventListener("hashchange", () => {
+  if (document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.startViewTransition(navigate);
+  } else {
+    navigate();
+  }
 });
 readRoute();

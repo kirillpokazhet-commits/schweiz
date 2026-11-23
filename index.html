@@ -8,16 +8,27 @@
 <script defer src="./app.js"></script>
 <body>
   <main class="layout">
+    <div class="masthead">
+      <a class="wordmark" href="#home"><span class="swiss-cross" aria-hidden="true"></span> Deutsch<span class="wordmark-level">A1.1</span></a>
+      <span class="location">Uznach, Schweiz</span>
+    </div>
     <header id="hero"></header>
     <div id="overview">
-      <nav id="lessons" aria-label="Лекции"></nav>
       <div class="overall">
         <div class="spread"><strong>Прогресс курса</strong><span id="percent"></span></div>
         <progress id="progress" max="21" value="0" aria-label="Прогресс курса"></progress>
         <small id="completed"></small>
-        <div class="actions"><a class="button primary" href="#final/words">Повторить слова</a></div>
+        <div class="study-next">
+          <div><strong id="due-count"></strong><span>К повторению</span></div>
+          <a class="button primary" href="#words">Учить слова</a>
+        </div>
       </div>
-      <details class="panel">
+      <section class="lesson-list" aria-labelledby="lesson-heading">
+        <a class="uznach-entry" href="#uznach"><strong>День в Уцнахе</strong><small id="uznach-count">Три разговора на немецком</small></a>
+        <h2 id="lesson-heading">Лекции</h2>
+        <nav id="lessons" aria-label="Лекции"></nav>
+      </section>
+      <details class="panel backup">
         <summary>Резервная копия прогресса</summary>
         <p>Скачай копию, чтобы перенести прогресс в другой браузер или восстановить его позже.</p>
         <div class="actions"><button type="button" id="export-progress">Скачать копию</button></div>
