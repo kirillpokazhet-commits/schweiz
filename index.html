@@ -3,9 +3,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deutsch A1.1 — личный тренажёр</title>
-<link rel="stylesheet" href="./style.css">
-<script defer src="./course.js"></script>
-<script defer src="./app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="./style.css?v=grammar-table">
+<script defer src="./course.js?v=grammar-basics"></script>
+<script defer src="./app.js?v=grammar-table"></script>
 <body>
   <main class="layout">
     <div class="masthead">
@@ -14,18 +17,27 @@
     </div>
     <header id="hero"></header>
     <div id="overview">
-      <div class="overall">
-        <div class="spread"><strong>Прогресс курса</strong><span id="percent"></span></div>
-        <div class="study-next">
-          <div><strong id="due-count"></strong><span>К повторению</span></div>
-          <a class="button primary" href="#words">Учить слова</a>
-        </div>
+      <section class="home-modes" aria-label="Режимы занятий">
+        <a class="destination destination-main" href="#words">
+          <span><strong>Учить слова</strong><small id="due-count"></small></span>
+          <span class="menu-arrow" aria-hidden="true"></span>
+        </a>
+        <a class="destination" href="#uznach">
+          <span><strong>День в Уцнахе</strong><small id="uznach-count">Три разговора на немецком</small></span>
+          <span class="menu-arrow" aria-hidden="true"></span>
+        </a>
+      </section>
+      <div class="course-progress">
+        <span>Прогресс курса</span><strong id="percent"></strong>
       </div>
       <section class="lesson-list" aria-labelledby="lesson-heading">
-        <a class="uznach-entry" href="#uznach"><strong>День в Уцнахе</strong><small id="uznach-count">Три разговора на немецком</small></a>
         <h2 id="lesson-heading">Лекции</h2>
         <nav id="lessons" aria-label="Лекции"></nav>
       </section>
+      <a class="destination final-entry" href="#final">
+        <span><strong>Итоги A1.1</strong><small id="final-summary">Тест, грамматика и повторение</small></span>
+        <span class="menu-arrow" aria-hidden="true"></span>
+      </a>
       <details class="panel backup">
         <summary>Резервная копия прогресса</summary>
         <p>Скачай копию, чтобы перенести прогресс в другой браузер или восстановить его позже.</p>

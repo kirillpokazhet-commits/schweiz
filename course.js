@@ -4,15 +4,19 @@ const course = [
   {
     id: 1, title: "Знакомство", german: "Guten Tag. Mein Name ist …", pages: "18–19",
     theory: [
-      ["Глагол любит второе место", "Когда ты рассказываешь что-то, обычно сначала идёт «кто», а потом действие. В вопросе с вопросительным словом сначала идёт «как», «откуда» или «что», а потом действие. У глагола второй стул в обоих случаях.", "Ich komme aus Italien. Woher kommst du?"],
-      ["Ich, du и Sie", "Про себя говори ich, с другом — du, а с незнакомым взрослым можно начать с вежливого Sie. Пиши Sie с большой буквы. У sprechen в форме du меняется ещё и гласная.", "Ich spreche Deutsch. Sprichst du Italienisch?", [
+      ["Глагол и его место", "Глагол обозначает действие или состояние: «что делать?» — приходить, читать, быть. В предложении он отвечает, например, на «что делает?» — приходит, читает. Немецкое kommen — «приходить», а Ich komme — «я прихожу».\n\nФорма глагола меняется в зависимости от того, кто выполняет действие. В обычном немецком предложении такая форма стоит на втором месте. В Ich komme aus Italien первым идёт ich, вторым — komme. Можно начать с Aus Italien. Тогда получится Aus Italien komme ich.\n\nAus Italien занимает одно место, потому что эти два слова вместе отвечают на вопрос «откуда?». В вопросе с Woher глагол тоже второй: Woher kommst du?", "Ich komme aus Italien. Woher kommst du?"],
+      ["«Ты», «вы» и «они»", "Местоимение — слово, которое можно использовать вместо имени или названия. Например, «Анна читает» → «она читает». В немецком ich — «я», du — «ты», er / sie / es — «он / она / оно», wir — «мы», ihr — «вы», sie — «они».\n\nС одним другом говори du. Пришли двое друзей? Теперь ihr. В магазине вежливое Sie подходит и к одному человеку, и к нескольким. Сравни: Wo wohnt ihr? и Wo wohnen Sie?\n\nВ каждой строке таблицы показано, какую форму глагола использовать с этим местоимением. Например, «мы говорим» — wir sprechen. Вежливое Sie всегда пишется с большой буквы. У sprechen с du и er меняется ещё и гласная: ich spreche, du sprichst, er spricht.", "Wir sprechen Deutsch. Sprecht ihr auch Deutsch? Sprechen Sie Deutsch?", [
         ["Кто?", "heissen", "kommen", "sprechen", "sein"],
-        ["ich", "heisse", "komme", "spreche", "bin"],
-        ["du", "heisst", "kommst", "sprichst", "bist"],
-        ["Sie", "heissen", "kommen", "sprechen", "sind"]
-      ]],
-      ["Откуда ты? Что ты говоришь?", "Aus значит «из»: aus Italien. У некоторых стран есть артикль. Запомни целиком aus der Schweiz. Язык можно назвать без артикля: Ich spreche Deutsch. Если имя не расслышали, попроси произнести его по буквам.", "Können Sie das bitte buchstabieren?"],
-      ["Встреча, прощание и анкета", "В Уцнахе можно поздороваться словом Grüezi. В анкете Vorname — имя, Nachname — фамилия. А Auf Wiedersehen пригодится, когда пора уходить.", "Grüezi! Mein Name ist Nina Keller."]
+        ["ich — я", "heisse", "komme", "spreche", "bin"],
+        ["du — ты", "heisst", "kommst", "sprichst", "bist"],
+        ["er / sie / es — он / она / оно", "heisst", "kommt", "spricht", "ist"],
+        ["wir — мы", "heissen", "kommen", "sprechen", "sind"],
+        ["ihr — вы, на «ты» с каждым", "heisst", "kommt", "sprecht", "seid"],
+        ["sie — они", "heissen", "kommen", "sprechen", "sind"],
+        ["Sie — Вы, вежливо", "heissen", "kommen", "sprechen", "sind"]
+      ], "", { translation: "Мы говорим по-немецки. Вы тоже говорите по-немецки? Вы говорите по-немецки? (вежливо)", check: ["Как спросить «Откуда вы?» у двух друзей?", "Woher kommt ihr? Для вежливого обращения: Woher kommen Sie?"] }],
+      ["Страна и язык", "О себе можно сказать двумя фразами: Ich komme aus Italien. Ich spreche Italienisch. После aus называешь страну, после spreche — язык.\n\nБольшинство названий стран после aus идут без артикля: aus Polen. У Швейцарии есть артикль die, поэтому говорим aus der Schweiz.", "Können Sie das bitte buchstabieren?"],
+      ["Приветствие и анкета", "Зашёл в пекарню? Grüezi — и можно заказывать. С другом подойдёт Hallo. На прощание — Auf Wiedersehen, а по телефону — Auf Wiederhören.\n\nВ анкете Vorname — имя, Nachname — фамилия, Adresse — адрес.", "Grüezi! Mein Name ist Nina Keller."]
     ],
     words: [["Grüezi", "здравствуйте (в Швейцарии)", "1:0"], ["Guten Morgen", "доброе утро", "1:1"], ["Auf Wiedersehen", "до свидания"], ["heissen", "зваться", "1:2"], ["kommen", "приходить, быть родом", "1:4"], ["sprechen", "говорить"], ["aus", "из", "1:5"], ["buchstabieren", "произносить по буквам"], ["der Vorname · die Vornamen", "имя"], ["der Nachname · die Nachnamen", "фамилия"], ["die Sprache · die Sprachen", "язык"], ["die Adresse · die Adressen", "адрес", "2:5"]],
     practice: [
@@ -29,24 +33,24 @@ const course = [
   {
     id: 2, title: "Моя семья", german: "Meine Familie", pages: "30–31",
     theory: [
-      ["Mein или meine?", "Mein — «мой», dein — «твой», Ihr — «ваш», когда обращаешься на Sie. Посмотри на слово после них. Если у него die в единственном числе или это несколько человек, добавь -e. У der и das здесь окончания нет.", "Das ist mein Vater. Das sind meine Eltern.", [
+      ["Мой, твой, ваш", "Mein — «мой», dein — «твой», Ihr — вежливое «Ваш». Эти слова показывают, кому что принадлежит. Скажи «мой брат»: mein Bruder. Теперь поменяй брата на сестру: meine Schwester. Окончание зависит от рода и числа существительного, которое идёт следом. В этих примерах смотри на Bruder, Schwester или Eltern.\n\nДля der и das здесь бери mein, dein, Ihr. Для die и нескольких людей добавляй -e: meine Mutter, deine Eltern, Ihre Kinder. Вежливое Ihr пишется с большой буквы.", "Das ist mein Vater. Das sind meine Eltern.", [
         ["Чей?", "der Vater", "das Kind", "die Mutter", "die Eltern"],
         ["мой", "mein", "mein", "meine", "meine"],
         ["твой", "dein", "dein", "deine", "deine"],
         ["ваш (Sie)", "Ihr", "Ihr", "Ihre", "Ihre"]
       ]],
-      ["Кто что делает", "Er — он, sie — она, wir — мы, ihr — вы для группы друзей, sie — они. С er и sie обычно ставим -t: er lebt. С wir и sie во множественном числе — -en. У ihr обычно -t: ihr lebt.", "Meine Eltern leben in Bern."],
-      ["Sein, haben и sprechen", "У этих глаголов есть формы, которые проще выучить целиком. Du bist — «ты есть», du hast — «у тебя есть», du sprichst — «ты говоришь». Для нескольких людей вспомни wir sind и wir haben.", "Wir sind Geschwister. Er spricht Französisch.", [
+      ["Кто что делает?", "Спряжение — это изменение формы глагола в зависимости от того, кто выполняет действие. По-русски мы говорим «я живу», «он живёт», «мы живём». По-немецки то же различие видно в окончаниях: ich lebe, er lebt, wir leben.\n\nLeben («жить») — начальная форма, которую ищем в словаре. Lebe и lebt — формы для предложения. У многих немецких глаголов начальная форма заканчивается на -en.\n\nУ ihr обычно то же окончание -t, что и у er: ihr lebt. А если говоришь о родителях во множественном числе, получится sie leben.", "Meine Eltern leben in Bern."],
+      ["Быть, иметь, говорить", "Частые глаголы: sein, haben и sprechen. Сравни формы для ich, du и er: ich bin, du bist, er ist; ich habe, du hast, er hat.\n\nПопробуй произнести ich spreche, du sprichst, er spricht. Слышишь, где e стало i? Во множественном числе снова wir sprechen.", "Wir sind Geschwister. Er spricht Französisch.", [
         ["Кто?", "sein", "haben", "sprechen"],
-        ["ich", "bin", "habe", "spreche"], ["du", "bist", "hast", "sprichst"], ["er / sie", "ist", "hat", "spricht"],
+        ["ich", "bin", "habe", "spreche"], ["du", "bist", "hast", "sprichst"], ["er / sie / es", "ist", "hat", "spricht"],
         ["wir", "sind", "haben", "sprechen"], ["ihr", "seid", "habt", "sprecht"], ["sie / Sie", "sind", "haben", "sprechen"]
       ]],
-      ["Где живёшь и сколько тебе лет", "Для города ставим in: in Uznach. Возраст по-немецки говорят с sein: Ich bin zehn Jahre alt. Числа 11 и 12 — elf и zwölf. Дальше пригодится -zehn, например vierzehn. 16 и 17 сокращаются: sechzehn, siebzehn.", "Meine Schwester ist zwölf Jahre alt."],
-      ["Поговорим о себе", "Другу скажи Wie geht es dir?, а вежливо — Wie geht es Ihnen? Можно ответить Gut, danke. В анкете Wohnort — город, в котором ты сейчас живёшь, а Geburtsort — место, где родился.", "Wie geht es dir? Gut, danke!"]
+      ["Где живёшь и сколько лет?", "Ich wohne in Uznach. Ich bin zwölf Jahre alt. Для города бери in, для возраста — bin. В немецкой фразе буквально «я двенадцатилетний», поэтому нужен глагол sein.\n\nЧтобы спросить друга, скажи Wo wohnst du? или Wie alt bist du? В ответ часто хватит In Uznach или Zwölf.", "Meine Schwester ist zwölf Jahre alt."],
+      ["Как дела?", "С другом начни с Wie geht es dir? Вежливо спроси Wie geht es Ihnen? В этой паре достаточно запомнить два готовых вопроса. В ответ можно сказать Gut, danke!\n\nВ анкете Wohnort — где ты живёшь сейчас, Geburtsort — где родился. Это вполне могут быть разные города.", "Wie geht es dir? Gut, danke!"]
     ],
     words: [["die Familie · die Familien", "семья", "3:0"], ["der Bruder · die Brüder", "брат", "3:1"], ["die Schwester · die Schwestern", "сестра", "3:2"], ["das Kind · die Kinder", "ребёнок", "3:3"], ["die Eltern", "родители", "3:4"], ["der Vater · die Väter", "отец"], ["die Mutter · die Mütter", "мама"], ["der Wohnort · die Wohnorte", "место жительства"], ["die Telefonnummer · die Telefonnummern", "номер телефона", "2:4"], ["wohnen", "жить, проживать", "1:3"], ["haben", "иметь", "3:5"], ["zwölf", "двенадцать", "2:2"]],
     practice: [
-      ["Как сказать «моя мама»?", "meine Mutter", "Mutter — женский род, нужен хвостик -e.", "choice", ["meine Mutter", "mein Mutter", "Ihr Mutter"]],
+      ["Как сказать «моя мама»?", "meine Mutter", "Mutter — женского рода, поэтому к mein добавляется -e: meine Mutter.", "choice", ["meine Mutter", "mein Mutter", "Ihr Mutter"]],
       ["Das ___ meine Eltern.", "sind", "Eltern — во множественном числе, поэтому sind.", "gap"],
       ["Собери фразу «Мой брат живёт в Берне».", "Mein Bruder lebt in Bern", "Bruder — мужской род, поэтому mein. С er форма lebt.", "order", ["Bern", "lebt", "Mein", "in", "Bruder"]],
       ["Исправь глагол: Du habt zwei Kinder.", "Du hast zwei Kinder", "С du говорим hast.", "fix"],
@@ -59,10 +63,10 @@ const course = [
   {
     id: 3, title: "Покупки", german: "Einkaufen", pages: "42–43",
     theory: [
-      ["Вопрос, на который ответят «да» или «нет»", "Чтобы спросить «Есть ли у нас…?», поставь глагол первым. Если добавляешь вопросительное слово, оно занимает первое место, а глагол отступает на второе.", "Haben wir Milch? Was brauchen wir?"],
-      ["Ein, eine и слово «нет»", "Когда показываешь один предмет, говори ein Apfel, ein Ei или eine Tomate. Для «это не…» добавь k: kein Apfel, kein Ei, keine Tomate. Для нескольких предметов без точного количества: Das sind Tomaten. Для отрицания: Das sind keine Tomaten.", "Das ist keine Zitrone. Das ist eine Birne."],
-      ["Сколько и чего?", "Множественное число лучше запоминать вместе со словом: Apfel → Äpfel, Ei → Eier, Tomate → Tomaten. Молоко и сахар часто идут без артикля: Wir haben Milch. Количество можно добавить спереди: ein Liter Milch. В магазине пригодятся Franken и Rappen: 1.50 — ein Franken fünfzig.", "Zwei Kilo Kartoffeln kosten fünf Franken."],
-      ["Просим вежливо: möchte", "Ich möchte — «я хотел бы». Полезная фраза у прилавка. С du — möchtest, с er или sie — möchte, с wir и Sie — möchten, с ihr — möchtet.", "Ich möchte zwei Brötchen, bitte."]
+      ["Вопрос на «да» или «нет»", "Возьми Wir haben Milch. Переставь haben вперёд: Haben wir Milch? Вопрос готов.\n\nЕсли нужно узнать, что именно купить, начни с Was: Was brauchen wir? Глагол снова второй. Тут ждут названия продукта.", "Haben wir Milch? Was brauchen wir?"],
+      ["Ein, eine, kein", "Артикль — короткое слово перед существительным. Ein или eine ставим, когда говорим об одном предмете и собеседник ещё не знает, о каком именно. Например: Das ist ein Apfel — «Это яблоко». Присмотрелся, а это груша: Das ist kein Apfel, das ist eine Birne. Добавил k и изменил смысл.\n\nС die бери eine или keine. Если предметов несколько, ein исчезает, а отрицание остаётся: Tomaten → keine Tomaten.", "Das ist keine Zitrone. Das ist eine Birne."],
+      ["Кило, литры и цены", "Хочешь молоко? Сначала назови количество: ein Liter Milch. Для картошки так же: zwei Kilo Kartoffeln.\n\nНа кассе 1.50 можно услышать как ein Franken fünfzig. Последнее число — раппены. Если сомневаешься, переспроси и посмотри на ценник.", "Zwei Kilo Kartoffeln kosten fünf Franken."],
+      ["Я бы хотел…", "Ich möchte …, bitte — готовое начало заказа. Вставь нужное: zwei Brötchen, Kaffee, Wasser.\n\nОт продавца услышишь Was möchten Sie? У него другая форма, потому что он говорит вежливое «Вы». К другу можно обратиться Möchtest du auch Kaffee? Другие формы: er / sie möchte, wir möchten, ihr möchtet, sie möchten.", "Ich möchte zwei Brötchen, bitte."]
     ],
     words: [["der Apfel · die Äpfel", "яблоко"], ["das Ei · die Eier", "яйцо"], ["die Tomate · die Tomaten", "помидор"], ["die Birne · die Birnen", "груша"], ["das Brötchen · die Brötchen", "булочка"], ["die Milch", "молоко"], ["der Zucker", "сахар"], ["ein Kilo", "один килограмм"], ["die Flasche · die Flaschen", "бутылка"], ["der Franken · die Franken", "франк", "4:5"], ["kosten", "стоить", "4:4"], ["Ich möchte …", "Я хотел(а) бы…"]],
     practice: [
@@ -79,10 +83,10 @@ const course = [
   {
     id: 4, title: "Моя квартира", german: "Meine Wohnung", pages: "54–55",
     theory: [
-      ["Der, das, die", "Когда понятно, о каком предмете речь, используй его обычный артикль: der Tisch, das Bad, die Küche. Во множественном числе у всех die. Учи слово вместе с артиклем: пусть der и Tisch ходят парой.", "Hier ist die Küche. Dort sind die Stühle."],
-      ["Укажи, где предмет, и замени его коротким словом", "Hier — здесь, dort — там. Чтобы не повторять название, замени der на er, das на es, die в единственном числе на sie. Для нескольких предметов тоже sie, но глагол будет во множественном числе.", "Wo ist das Sofa? Es ist hier."],
-      ["Описываем и говорим «не»", "После ist и sind слово для описания идёт без окончания: Das Sofa ist blau. Die Stühle sind blau. Если диван не синий, скажи nicht blau. Если дивана совсем нет, используй kein: Wir haben kein Sofa.", "Das Bad ist klein. Es ist nicht dunkel."],
-      ["Два слова склеились", "Из Küche и Tisch получается Küchentisch. Последняя часть главная: это стол, значит der Küchentisch. В объявлении ищи Zimmer, Miete и Franken, а по телефону спроси Ist die Wohnung noch frei? Числа для цены: hundert — сто, tausend — тысяча, eine Million — миллион.", "Die Miete kostet tausend Franken."]
+      ["Der, das, die", "Существительное называет человека, предмет, место или понятие. Например: Tisch — «стол», Küche — «кухня». В немецком существительные пишутся с большой буквы.\n\nАртикль — отдельное слово перед существительным: der Tisch, das Bad, die Küche. В этих формах der показывает мужской род, das — средний, die — женский. Род может отличаться от русского, поэтому запоминай артикль вместе со словом.\n\nВо множественном числе в этих примерах используется артикль die: die Stühle, die Tische. Для одного спроси Wo ist …?, для нескольких — Wo sind …?", "Hier ist die Küche. Dort sind die Stühle."],
+      ["Здесь или там?", "Hier значит «здесь», dort — «там». Если вы уже говорите о диване, можно ответить коротко: Es ist dort.\n\nСмотри на немецкий артикль. У Sofa стоит das, поэтому в ответе es, даже если по-русски диван — «он».", "Wo ist das Sofa? Es ist hier."],
+      ["Цвет, размер и «не»", "Прилагательное отвечает на вопрос «какой?», «какая?» или «какое?» и описывает предмет. В Das Sofa ist blau слово blau — прилагательное: «какой диван?» — синий. Теперь опиши два стула: Die Stühle sind blau. Изменился глагол, но blau осталось.\n\nЕсли цвет другой, достаточно добавить nicht: nicht blau. Для размера и цены тот же приём: nicht gross, nicht teuer.", "Das Bad ist klein. Es ist nicht dunkel."],
+      ["Из двух слов одно", "Küche — кухня, Tisch — стол, Küchentisch — кухонный стол. Посмотри на конец: это по-прежнему der Tisch, поэтому der Küchentisch.\n\nТак же со спальней. Там спят, но главное слово das Zimmer, значит das Schlafzimmer.", "Die Miete kostet tausend Franken."]
     ],
     words: [["die Wohnung · die Wohnungen", "квартира"], ["das Zimmer · die Zimmer", "комната"], ["die Küche · die Küchen", "кухня"], ["das Bad · die Bäder", "ванная"], ["der Tisch · die Tische", "стол"], ["der Stuhl · die Stühle", "стул"], ["das Sofa · die Sofas", "диван"], ["der Kühlschrank · die Kühlschränke", "холодильник"], ["die Miete · die Mieten", "арендная плата"], ["hier", "здесь"], ["dort", "там"], ["teuer", "дорогой"]],
     practice: [
@@ -99,11 +103,11 @@ const course = [
   {
     id: 5, title: "Распорядок дня", german: "Tagesabläufe", pages: "66–67",
     theory: [
-      ["Глагол раскладывается на две части", "В словаре видишь aufstehen, а в предложении — Ich stehe … auf. Часть stehe занимает второе место, а приставка auf ждёт в конце. Так же ведут себя einkaufen, aufräumen, anfangen и fernsehen.", "Ich räume mein Zimmer am Samstag auf."],
-      ["Am, um и von … bis", "С днями и большей частью суток ставь am: am Dienstag, am Morgen. Ночью говорят in der Nacht. Точные часы идут с um. Чтобы сказать «с … до …», бери von … bis: von Montag bis Freitag.", "Der Laden ist von acht bis sechs Uhr geöffnet."],
-      ["Сколько времени?", "Wie spät ist es? — «Который час?». Можно сказать acht Uhr dreissig. А halb neun — это тоже 8:30: прошла половина пути к девяти. Viertel nach acht — 8:15, Viertel vor neun — 8:45.", "Es ist halb neun."],
-      ["Если начинаешь с времени", "Am Abend — это один кусочек предложения, даже если в нём два слова. После него сразу ставь глагол, а потом того, кто действует. Правило второго места работает и здесь.", "Am Abend sehe ich fern."],
-      ["Формы, которые легко перепутать", "С du и er меняется гласная: du isst, er schläft, du fängst an, er sieht fern. У arbeiten появляется лишнее e, чтобы проще было произнести: du arbeitest, er arbeitet.", "Wann fängst du an?"]
+      ["Приставка в конце", "Приставка — часть слова перед его основной частью. У aufstehen («вставать») это auf. Такая приставка может отделяться от глагола. В предложении Ich stehe auf форма stehe согласуется с ich, а auf ставится в конце. Со временем получится Ich stehe um sieben Uhr auf.\n\nУ einkaufen в конец ставим ein: Ich kaufe heute ein.", "Ich räume mein Zimmer am Samstag auf."],
+      ["Am, um и bis", "Предлог — короткое слово, которое показывает связь между словами, например время или место. В этой теме am и um помогают ответить на «когда?». В понедельник — am Montag, утром — am Morgen. Ровно в девять — um neun Uhr. Для «ночью» используется in der Nacht.\n\nЕсли на двери написано von Montag bis Freitag, это «с понедельника по пятницу». С часами так же: von acht bis sechs Uhr.", "Der Laden ist von acht bis sechs Uhr geöffnet."],
+      ["Который час?", "Acht Uhr dreissig — 8:30. Halb neun — тоже 8:30. Halb перед названием часа означает, что до этого часа осталось 30 минут.\n\nViertel nach acht — четверть часа после восьми, 8:15. Viertel vor neun — четверть часа до девяти, 8:45.", "Es ist halb neun."],
+      ["Начинаем со времени", "Ich arbeite am Montag. Если хочешь начать с понедельника, передвинь Am Montag вперёд. Следом сразу поставь arbeite: Am Montag arbeite ich.\n\nAm Montag занимает одно место: оба слова вместе отвечают на вопрос «когда?». Сразу после них идёт глагол.", "Am Abend sehe ich fern."],
+      ["Du isst, er schläft", "Послушай, как меняется середина слова: ich esse, du isst; ich schlafe, er schläft. Такие формы проще запоминать парами.\n\nУ arbeiten основа не меняется, но в конце добавляется e: du arbeitest, er arbeitet. Произнеси их подряд, так легче услышать разницу.", "Wann fängst du an?"]
     ],
     words: [["aufstehen", "вставать", "5:0"], ["aufräumen", "убирать, наводить порядок"], ["anfangen", "начинать"], ["fernsehen", "смотреть телевизор"], ["arbeiten", "работать", "5:5"], ["schlafen", "спать"], ["der Morgen · die Morgen", "утро"], ["der Abend · die Abende", "вечер"], ["der Montag · die Montage", "понедельник", "5:4"], ["die Uhr · die Uhren", "часы", "5:3"], ["halb neun", "половина девятого (8:30)"], ["geöffnet", "открыто"]],
     practice: [
@@ -120,17 +124,18 @@ const course = [
   {
     id: 6, title: "Свободное время", german: "Freizeit", pages: "78–79",
     theory: [
-      ["Akkusativ: когда «кого?» или «что?»", "Сравни: Der Saft ist kalt — сок сам про себя. Ich trinke den Saft — сок уже то, что я пью. В примерах этой лекции меняется мужской артикль: der → den, ein → einen, kein → keinen. У das, die и у множественного числа формы те же.", "Ich nehme einen Tee und eine Suppe.", [
+      ["Der или den?", "Падеж показывает роль слова в предложении. Сравни: «друг пришёл» и «я вижу друга». Во втором случае «друга» отвечает на вопрос «кого я вижу?» и стоит в винительном падеже. По-немецки он называется Akkusativ.\n\nDer Tee ist heiss: чай — то, о чём говорится. Здесь используется Nominativ (именительный падеж). В Ich trinke den Tee чай отвечает на «что я пью?», поэтому нужен Akkusativ. Здесь у мужского рода der меняется на den.\n\nС ein и kein получается einen Tee и keinen Tee. В среднем и женском роде и во множественном числе формы в таблице не меняются.", "Ich nehme einen Tee und eine Suppe.", [
         ["Род", "Кто? / Что?", "Кого? / Что?"],
         ["мужской", "der / ein / kein", "den / einen / keinen"], ["средний", "das / ein / kein", "das / ein / kein"],
         ["женский", "die / eine / keine", "die / eine / keine"], ["множественное число", "die / keine", "die / keine"]
       ]],
-      ["Ja, nein и doch", "На обычное «Ты читаешь?» ответь ja или nein. Когда в вопросе уже есть «не», doch отменяет это «не»: «Ты не читаешь?» — «Нет-нет, читаю!» По-немецки одного doch уже хватает.", "Liest du nicht gern? Doch, ich lese gern."],
-      ["Четыре глагола с сюрпризом", "С ich всё спокойно, а с du и er меняется гласная. Например: ich fahre, du fährst, er fährt. Во множественном числе снова берём обычную основу: wir fahren.", "Am Sonntag trifft sie eine Freundin.", [
+      ["Когда сказать doch?", "Kommst du? — Ja, ich komme. Kommst du nicht? — Doch, ich komme! Во втором вопросе человек уже предположил, что ты не придёшь, а ты его поправляешь.\n\nЕсли он угадал и ты правда не придёшь, ответь Nein, ich komme nicht.", "Liest du nicht gern? Doch, ich lese gern."],
+      ["Nimmst, liest, fährst", "Возьми пары: ich nehme — du nimmst, ich lese — du liest, ich treffe — du triffst, ich fahre — du fährst. С er тоже меняется середина слова.\n\nДля группы друзей загляни в строку ihr: ihr nehmt, ihr lest, ihr trefft, ihr fahrt. Здесь гласная такая же, как в словаре.", "Am Sonntag trifft sie eine Freundin.", [
         ["Кто?", "nehmen", "lesen", "treffen", "fahren"],
-        ["ich", "nehme", "lese", "treffe", "fahre"], ["du", "nimmst", "liest", "triffst", "fährst"], ["er / sie", "nimmt", "liest", "trifft", "fährt"]
+        ["ich", "nehme", "lese", "treffe", "fahre"], ["du", "nimmst", "liest", "triffst", "fährst"], ["er / sie / es", "nimmt", "liest", "trifft", "fährt"],
+        ["wir", "nehmen", "lesen", "treffen", "fahren"], ["ihr", "nehmt", "lest", "trefft", "fahrt"], ["sie / Sie", "nehmen", "lesen", "treffen", "fahren"]
       ]],
-      ["Хобби и погода", "Gern говорит, что тебе нравится действие: Ich lese gern. О погоде можно начать с Es: Es regnet, Es ist windig. В прогнозе пригодятся im Norden и im Süden. Если снаружи дождь, книга — тоже план на выходные.", "Im Süden ist es warm. Hier regnet es."]
+      ["Хобби и погода", "Ich lese gern — я люблю читать. Подставь своё занятие: Ich schwimme gern, Ich tanze gern.\n\nО погоде начни с es: Es regnet, Es ist windig. Если впереди Heute, глагол сразу после него: Heute regnet es.", "Im Süden ist es warm. Hier regnet es."]
     ],
     words: [["die Freizeit", "свободное время"], ["das Hobby · die Hobbys", "увлечение"], ["das Wetter", "погода"], ["der Regen", "дождь"], ["die Sonne", "солнце"], ["windig", "ветрено"], ["gern", "охотно, с удовольствием", "7:0"], ["lesen", "читать"], ["treffen", "встречать"], ["fahren", "ехать"], ["nehmen", "брать"], ["doch", "как раз да (возражение на отрицание)"]],
     practice: [
@@ -147,13 +152,14 @@ const course = [
   {
     id: 7, title: "Дети и школа", german: "Kinder und Schule", pages: "90–91",
     theory: [
-      ["Kann — могу, will — хочу", "Для «могу» бери kann, для «хочу» — will. Меняется только первый глагол, а второй уходит в конец в форме из словаря. В вопросе без вопросительного слова kann или willst встанет первым.", "Kannst du heute kommen? Ich will Tennis spielen.", [
+      ["Могу или хочу?", "Ich kann schwimmen — я умею плавать. Ich will schwimmen — я хочу плавать. Действие одно, но от первого глагола меняется смысл.\n\nKann и will — формы модальных глаголов. Модальный глагол показывает, могу ли я что-то сделать или хочу ли. После него в конец ставим второй глагол в начальной форме, то есть как в словаре: schwimmen. В вопросе на «да» или «нет» сначала идёт kann или will в нужной форме: Kannst du schwimmen?", "Kannst du heute kommen? Ich will Tennis spielen.", [
         ["Кто?", "können", "wollen"],
-        ["ich / er / sie", "kann", "will"], ["du", "kannst", "willst"], ["wir / sie / Sie", "können", "wollen"], ["ihr", "könnt", "wollt"]
+        ["ich", "kann", "will"], ["du", "kannst", "willst"], ["er / sie / es", "kann", "will"],
+        ["wir", "können", "wollen"], ["ihr", "könnt", "wollt"], ["sie / Sie", "können", "wollen"]
       ]],
-      ["Что уже случилось: Perfekt с haben", "В разговоре о вчерашнем обычно нужны две части. Ставь habe, hast или hat на обычное место глагола, а форму прошедшего — в конец. У многих обычных глаголов она выглядит как ge-…-t: lernen → gelernt. Некоторые формы нужно запомнить: schreiben → geschrieben, trinken → getrunken.", "Gestern habe ich ein Lied gesungen."],
-      ["Когда в прошлом нужно sein", "С gehen, fahren и kommen, когда речь о перемещении, обычно берём sein: bin gegangen, bin gefahren, bin gekommen. Для вопроса ставим bist или sind вперёд, а вторую часть оставляем в конце.", "Bist du mit dem Bus gekommen?"],
-      ["Договориться или предупредить школу", "Wollen wir …? — это предложение сделать что-то вместе. Если заболел, Ich bin krank подойдёт для начала разговора. Потом можно добавить, что сегодня не придёшь: Ich kann heute nicht kommen.", "Mein Sohn ist krank. Er kann heute nicht kommen."]
+      ["Что было вчера?", "Perfekt — одна из форм прошедшего времени. Её часто используют в разговоре, чтобы сказать, что уже произошло: Ich habe Deutsch gelernt — «Я учил немецкий». Habe — вспомогательный глагол, а gelernt называет само действие в форме прошедшего времени. Habe идёт после ich, gelernt — в конец.\n\nС другом скажи Du hast gelernt. О нём — Er hat gelernt. Первое слово меняется, gelernt можно оставить.", "Gestern habe ich ein Lied gesungen."],
+      ["Почему bin gekommen?", "Сравни Ich habe gelernt и Ich bin gekommen. Для gehen, kommen и fahren, когда речь о перемещении, обычно берём sein. Учи целыми парами: bin gegangen, bin gekommen, bin gefahren.\n\nЕсли начнёшь с Gestern, bin будет вторым: Gestern bin ich nach Uznach gefahren.", "Bist du mit dem Bus gekommen?"],
+      ["Как договориться?", "Предложи что-то вместе: Wollen wir spazieren gehen? Можно ответить Ja, gern или предложить другое: Lieber morgen.\n\nЕсли сам сегодня не можешь на урок, пригодится Ich kann heute nicht kommen. Kann стоит после ich, kommen — в конце.", "Mein Sohn ist krank. Er kann heute nicht kommen."]
     ],
     words: [["die Schule · die Schulen", "школа"], ["der Unterricht", "занятия, урок"], ["die Lehrerin · die Lehrerinnen", "учительница"], ["die Prüfung · die Prüfungen", "экзамен"], ["der Ausflug · die Ausflüge", "поездка, экскурсия"], ["können", "мочь, уметь", "7:5"], ["wollen", "хотеть"], ["lernen", "учиться, изучать"], ["krank", "больной"], ["pünktlich", "вовремя, пунктуально"], ["gestern", "вчера"], ["Gute Besserung!", "Выздоравливай!"]],
     practice: [
@@ -734,37 +740,37 @@ course[6].words.push(
 
 // A short reference based on the grammar overview on pages 204–207.
 const grammarReview = [
-  ["Поставь глагол на нужное место", "В утверждении и в вопросе с Wie, Wo или Was глагол занимает второе место. В вопросе на «да» или «нет» он переходит на первое. Am Freitag — один кусочек предложения, поэтому после него сразу идёт глагол.", "Am Freitag kaufe ich Brot. Was kaufst du? Kaufst du Brot?", [
-    ["Что делаем?", "Первый кусочек", "Дальше"],
+  ["Где ставить глагол?", "Возьми Ich kaufe Brot. Начни со времени: Am Freitag kaufe ich Brot. Или задай вопрос с Was: Was kaufst du? В обоих случаях глагол второй. А в вопросе на «да» или «нет» он первый: Kaufst du Brot?", "Am Freitag kaufe ich Brot. Was kaufst du? Kaufst du Brot?", [
+    ["Что делаем?", "Первое место", "Дальше"],
     ["Рассказываем", "Am Freitag", "kaufe ich Brot."],
     ["Спрашиваем «что?»", "Was", "kaufst du?"],
     ["Ждём «да» или «нет»", "Kaufst", "du Brot?"]
   ]],
-  ["Не учи существительное в одиночку", "Запоминай три вещи вместе: артикль, слово и его множественное число. Для «мой» или «твой» смотри на то, чем владеют: mein Sohn, meine Tochter, meine Kinder. Чтобы не повторять предмет, можно сказать er вместо der Tisch, es вместо das Sofa, sie вместо die Lampe.", "Das ist meine Lampe. Sie ist neu.", [
+  ["Слова с артиклем", "Учи слова парами: der Sohn — die Söhne. Тогда легче сказать mein Sohn и заменить слово на er. Если детей несколько, получится meine Kinder и sie.", "Das ist meine Lampe. Sie ist neu.", [
     ["Один", "Несколько"],
     ["der Sohn", "die Söhne"], ["das Brot", "die Brote"], ["die Banane", "die Bananen"], ["das Zimmer", "die Zimmer"]
   ]],
-  ["Вижу предмет, и артикль меняется", "В Akkusativ особенно следи за мужским родом: der → den, ein → einen, kein → keinen. После haben или nehmen сначала спроси себя: «Что у меня есть? Что я беру?»", "Der Tee ist heiss. Ich nehme den Tee.", [
+  ["Der → den", "Der Tee ist heiss — говорим про чай. Ich nehme den Tee — чай теперь то, что я беру. Для мужского рода в этой роли бери den, einen, keinen.", "Der Tee ist heiss. Ich nehme den Tee.", [
     ["Род", "Когда предмет главный", "Когда беру или вижу"],
     ["мужской", "der / ein / kein", "den / einen / keinen"],
     ["средний", "das / ein / kein", "das / ein / kein"],
     ["женский", "die / eine / keine", "die / eine / keine"],
     ["множественное число", "die / — / keine", "die / — / keine"]
   ]],
-  ["Как сказать «не» или возразить", "Kein заменяет ein и отрицает сам предмет: kein Brot, keine Möbel. Nicht отрицает, например, качество или место: nicht teuer, nicht hier. На вопрос с «не» отвечай doch, если на самом деле ответ положительный.", "Hast du keinen Hunger? Doch, ich habe Hunger."],
-  ["Глаголы: найди форму для du", "Часто помогают окончания: ich -e, du -st, er -t, wir -en, ihr -t, sie -en. У arbeiten нужно дополнительное e: du arbeitest. С du и er некоторые глаголы меняют гласную: du sprichst, er schläft. А sein и haben полезно повторять маленькими тройками.", "Ich bin hier. Du bist dort. Er ist zu Hause.", [
+  ["Nicht, kein и doch", "Дивана нет — kein Sofa. Диван есть, но цвет другой — nicht blau. На Hast du keinen Hunger? скажи Doch, ich habe Hunger, если на самом деле голоден.", "Hast du keinen Hunger? Doch, ich habe Hunger."],
+  ["Формы для du", "Посмотри на форму с ich, потом попробуй с du. Ich arbeite → du arbeitest. Ich lese → du liest. У sein и haben выучи готовые пары: ich bin → du bist, ich habe → du hast.", "Ich bin hier. Du bist dort. Er ist zu Hause.", [
     ["Кто?", "sein", "haben", "lesen", "nehmen"],
     ["ich", "bin", "habe", "lese", "nehme"], ["du", "bist", "hast", "liest", "nimmst"],
     ["er / sie / es", "ist", "hat", "liest", "nimmt"], ["wir", "sind", "haben", "lesen", "nehmen"],
     ["ihr", "seid", "habt", "lest", "nehmt"], ["sie / Sie", "sind", "haben", "lesen", "nehmen"]
   ]],
-  ["Две части предложения держатся за края", "У отделяемого глагола в конце ждёт приставка. После kann, will или möchte там же может ждать второй глагол в начальной форме. В вопросе двигается первая часть, а вторая остаётся в конце.", "Rufst du heute an? Kannst du später anrufen? Ich möchte heute einkaufen."],
-  ["Perfekt: расскажи, что уже было", "У большинства глаголов берём haben. Для перемещения с gehen, fahren и kommen в примерах курса берём sein. Вторая часть прошедшего времени стоит в конце. Чтобы запомнить её, учи сразу парой: hat gelesen или ist gegangen.", "Gestern habe ich gelesen. Heute bin ich nach Hause gegangen.", [
+  ["Приставка или второй глагол?", "В Ich rufe dich an в конце приставка. В Ich kann dich anrufen целый anrufen идёт в конец, потому что kann — модальный глагол. Сравни вопросы Rufst du an? и Kannst du anrufen?", "Rufst du heute an? Kannst du später anrufen? Ich möchte heute einkaufen."],
+  ["Расскажи про вчера", "Возьми hat gelesen и ist gegangen. Если история про тебя, получится ich habe gelesen или ich bin gegangen. Начни с Gestern и посмотри: habe и bin всё равно вторые.", "Gestern habe ich gelesen. Heute bin ich nach Hause gegangen.", [
     ["Глагол", "Perfekt с er"],
     ["lernen", "hat gelernt"], ["machen", "hat gemacht"], ["treffen", "hat getroffen"], ["trinken", "hat getrunken"],
     ["sprechen", "hat gesprochen"], ["schreiben", "hat geschrieben"], ["gehen", "ist gegangen"], ["fahren", "ist gefahren"], ["kommen", "ist gekommen"]
   ]],
-  ["Am, um, von … bis …", "С днём недели и частью дня обычно берём am. Для ночи запомни in der Nacht. Для точного времени берём um, а для промежутка — von … bis ….", "Am Dienstag beginnt der Kurs um neun Uhr. Er dauert von neun bis elf Uhr."]
+  ["Дни и часы", "Am Dienstag — во вторник, um neun Uhr — в девять. Von neun bis elf — с девяти до одиннадцати. Для ночи запомни in der Nacht.", "Am Dienstag beginnt der Kurs um neun Uhr. Er dauert von neun bis elf Uhr."]
 ];
 
 const finalTest = [
@@ -785,99 +791,114 @@ const finalTest = [
 ];
 
 course[2].theory.push([
-  "Как заказать и уточнить количество",
-  "Начни с Ich möchte …, bitte. Если продавец спрашивает Wie viele?, он хочет знать, сколько штук. Wie viel? подходит для цены или количества того, что измеряют, например молока.",
+  "Сколько штук?",
+  "Wie viele Brötchen? Вопрос о количестве булочек. Две булочки? Ответь Zwei, bitte.\n\nWie viel? подходит для цены или количества, которое меряют. Сравни Wie viele Brötchen? и Wie viel kostet das? Первый вопрос про штуки, второй про деньги.",
   "Ich möchte zwei Brötchen, bitte. Wie viel kostet das?"
 ]);
 course[4].theory.push([
-  "Читаем табло на вокзале",
-  "Wann? спрашивает «когда?», а Von welchem Gleis? — «с какого пути?». Запомни ответ von Gleis zwei целиком. У abfahren приставка ab уходит в конец: Der Zug fährt um zehn Uhr ab.",
+  "На вокзале",
+  "Не знаешь время отправления? Спроси Wann fährt der Zug ab? Нужен номер пути? Von welchem Gleis fährt der Zug?\n\nВ ответ часто говорят только главное: Um zehn Uhr. Von Gleis zwei. Обрати внимание на два числа: одно обозначает время, другое — номер пути.",
   "Wann fährt der Zug ab? Um zehn Uhr, von Gleis zwei."
 ]);
 course[6].theory.push([
-  "Как предупредить школу",
-  "В начале звонка можно назвать своё имя: Hier ist … Затем скажи, кто заболел, и что сегодня он не придёт. Готовые кусочки можно менять: mein Sohn, meine Tochter, in die Schule, in den Deutschkurs.",
+  "Звонок в школу или на курс",
+  "Сначала представься: Guten Morgen, hier ist Anna Keller. Затем скажи, что случилось: Ich bin krank или Meine Tochter ist krank.\n\nЗакончи тем, зачем позвонил. О себе: Ich kann heute nicht kommen. О дочери: Sie kann heute nicht kommen.",
   "Guten Morgen. Hier ist Anna Keller. Meine Tochter ist krank. Sie kann heute nicht kommen."
 ]);
 
 // Map each exercise to the explanation that helps with its likely mistake.
 const practiceRules = [
-  [1, 1, 0, 1, 2, 0, 3, 0],
-  [0, 2, 1, 2, 2, 3, 3, 4],
-  [0, 1, 3, 1, 2, 2, 2, 3],
-  [0, 1, 2, 2, 1, 2, 3, 2],
-  [2, 1, 0, 3, 0, 0, 1, 4],
-  [0, 1, 3, 2, 3, 2, 0, 2],
-  [0, 0, 1, 2, 0, 2, 1, 2]
+  [4, 1, 4, 1, 2, 5, 3, 4],
+  [0, 5, 1, 2, 2, 7, 4, 4],
+  [0, 5, 3, 5, 5, 2, 6, 3],
+  [0, 4, 5, 4, 1, 2, 6, 5],
+  [7, 1, 6, 8, 6, 6, 1, 4],
+  [4, 5, 3, 2, 6, 2, 4, 2],
+  [0, 0, 6, 2, 0, 2, 6, 7]
 ];
-const testRules = [4, 0, 1, 4, 3, 1, 1, 3, 5, 7, 2, 3, 5, 6];
-const questionRules = new Map([
-  ...course.flatMap((lesson, index) => lesson.practice.map((question, position) => [question, lesson.theory[practiceRules[index][position]]])),
-  ...finalTest.map((question, index) => [question, grammarReview[testRules[index]]])
-]);
 
 // Optional lesson cards add a translation and a self-check to the usual example.
 const theoryExtensions = [
   [
-    ["Пять вопросов для знакомства", "Вопросительное слово задаёт направление. Wer просит назвать человека, wie — имя или способ, wo — место, woher — откуда человек приехал, was — что именно. Затем ставь глагол, потом того, к кому обращаешься.", "Wo wohnen Sie? Woher kommen Sie?", [
+    ["Кто, где, откуда?", "Чтобы узнать, где человек живёт, начни с Wo. Чтобы узнать, откуда он родом, начни с Woher. Сравни ответы: Ich wohne in Uznach и Ich komme aus Spanien.\n\nС остальными вопросами порядок тот же: вопросительное слово, потом глагол. Wer ist das? Wie heisst du? Was ist das?", "Wo wohnen Sie? Woher kommen Sie?", [
       ["Слово", "Что спрашивает", "Пример"],
       ["wer", "кто", "Wer ist das?"], ["wie", "как", "Wie heisst du?"], ["wo", "где", "Wo wohnst du?"], ["woher", "откуда", "Woher kommst du?"], ["was", "что", "Was ist das?"]
     ], "", { translation: "Где вы живёте? Откуда вы родом?", check: ["Как спросить у друга, откуда он?", "Woher kommst du? Woher спрашивает о происхождении."] }],
-    ["Heissen или sein: два способа представиться", "Ich heisse Mia и Ich bin Mia оба подходят при знакомстве. Есть и третья фраза: Mein Name ist Mia. В ней подлежащее Mein Name можно считать одним кусочком. Поэтому ist всё равно на втором месте.", "Ich heisse Mia. Mein Name ist Mia.", null, "", { translation: "Меня зовут Миа. Моё имя — Миа.", check: ["Почему в Mein Name ist Mia используется ist?", "Mein Name — «моё имя», это как er. Поэтому ist, как в er ist."] }],
-    ["Как переспросить и назвать имя по буквам", "Wie bitte? пригодится, когда не расслышал. Langsam, bitte — «медленно, пожалуйста». В немецком написании фамилии могут встретиться ä, ö, ü. В швейцарском стандартном немецком вместо ß пишут ss: heissen, Strasse.", "Wie bitte? Können Sie Ihren Namen buchstabieren?", null, "", { translation: "Простите? Можете произнести своё имя по буквам?", check: ["Что сказать, если собеседник говорит быстро?", "Langsam, bitte. — «Медленнее, пожалуйста»."] }]
+    ["Как представиться", "На первой встрече хватит одной фразы: Ich heisse Mia («Меня зовут Миа») или Ich bin Mia («Я Миа»). Можно ещё Mein Name ist Mia.\n\nПочему ist? Подлежащее Mein Name стоит в единственном числе. Поэтому используется ist, как в Der Name ist kurz.", "Ich heisse Mia. Mein Name ist Mia.", null, "", { translation: "Меня зовут Миа. Моё имя — Миа.", check: ["Почему в Mein Name ist Mia используется ist?", "Mein Name — «моё имя», это как er. Поэтому ist, как в er ist."] }],
+    ["Как переспросить", "Если не расслышал, скажи Wie bitte? Если собеседник спешит, добавь Langsam, bitte. Чтобы узнать написание, спроси Können Sie Ihren Namen buchstabieren?\n\nНа швейцарских вывесках увидишь ss вместо ß: heissen, Strasse. Буквы ä, ö и ü при этом остаются.", "Wie bitte? Können Sie Ihren Namen buchstabieren?", null, "", { translation: "Простите? Можете произнести своё имя по буквам?", check: ["Что сказать, если собеседник говорит быстро?", "Langsam, bitte. — «Медленнее, пожалуйста»."] }]
   ],
   [
-    ["Das ist или Das sind?", "Das может указывать и на одного человека, и на группу. Меняется глагол. Представляешь брата — Das ist mein Bruder. Показываешь на родителей — Das sind meine Eltern. Родители всегда идут во множественном числе, даже если на фото никто не улыбнулся.", "Das ist meine Schwester. Das sind meine Geschwister.", null, "", { translation: "Это моя сестра. Это мои братья и сёстры.", check: ["Das ___ meine Grosseltern. Ist или sind?", "Sind, потому что die Grosseltern — множественное число."] }],
-    ["Sie и sie: смотри на глагол", "Sie wohnen — «вы живёте» при вежливом обращении, sie wohnen — «они живут». А sie wohnt — «она живёт». Если слово в начале предложения, оно всегда с большой буквы, поэтому ориентируйся на глагол и ситуацию.", "Sie wohnt in Bern. Ihre Eltern wohnen in Basel.", null, "", { translation: "Она живёт в Берне. Её родители живут в Базеле.", check: ["В Sie leben in Bern речь об одной женщине?", "Форма leben здесь означает «они живут» или «вы живёте». Для одной женщины было бы Sie lebt."] }],
-    ["Числа до двадцати и телефон", "В телефоне можно говорить цифры по одной. От 13 до 19 слышится zehn: dreizehn, vierzehn. Запомни формы без лишних букв: sechzehn и siebzehn. Двадцать — zwanzig.", "Meine Nummer beginnt mit null, sieben, neun.", [
+    ["Das ist или das sind?", "Показываешь на брата: Das ist mein Bruder. Показываешь на родителей: Das sind meine Eltern. В обоих случаях используем Das. С одним человеком будет ist, с несколькими — sind.\n\nЕсли сомневаешься, посчитай: одна сестра — ist, две сестры — sind.", "Das ist meine Schwester. Das sind meine Geschwister.", null, "", { translation: "Это моя сестра. Это мои братья и сёстры.", check: ["Das ___ meine Grosseltern. Ist или sind?", "Sind, потому что die Grosseltern — множественное число."] }],
+    ["Она, они или Вы?", "В начале предложения Sie всегда с большой буквы. Подсказку даёт глагол: Sie wohnt — «она живёт». Sie wohnen — «они живут» или «Вы живёте».\n\nЕсли вопрос обращён прямо к собеседнику — Wo wohnen Sie? — это вежливое «Вы». В рассказе о соседях Sie wohnen скорее значит «они живут».", "Sie wohnt in Bern. Ihre Eltern wohnen in Basel.", null, "", { translation: "Она живёт в Берне. Её родители живут в Базеле.", check: ["В Sie leben in Bern речь об одной женщине?", "Форма leben здесь означает «они живут» или «вы живёте». Для одной женщины было бы Sie lebt."] }],
+    ["Числа и телефон", "Номер можно назвать по цифрам: null, sieben, neun. Так проще и сказать, и записать.\n\nВ числах от 13 до 19 узнавай -zehn. У 16 и 17 начало чуть короче: sechzehn, siebzehn. Услышал zwölf — пишешь 12, услышал zwanzig — 20.", "Meine Nummer beginnt mit null, sieben, neun.", [
       ["Цифры", "По-немецки"],
       ["0–4", "null, eins, zwei, drei, vier"], ["5–9", "fünf, sechs, sieben, acht, neun"],
       ["10–14", "zehn, elf, zwölf, dreizehn, vierzehn"], ["15–20", "fünfzehn, sechzehn, siebzehn, achtzehn, neunzehn, zwanzig"]
     ], "", { translation: "Мой номер начинается с нуля, семёрки, девятки.", check: ["Как сказать «мне семнадцать лет»?", "Ich bin siebzehn Jahre alt. Возраст говорим с bin."] }]
   ],
   [
-    ["Артикль зависит от того, что ты хочешь сказать", "Представляешь предмет впервые — ein или eine. Показываешь, что его нет, — kein или keine. У неисчисляемых продуктов часто нет артикля: Ich kaufe Milch. Но «молока нет» — Ich habe keine Milch.", "Das ist ein Ei. Wir haben keine Eier.", [
+    ["Когда нужен артикль?", "Показываешь одно яйцо — ein Ei. Покупаешь молоко вообще — Wir kaufen Milch. Артикль не обязателен, если речь просто о продукте.\n\nЕсли молока нет, скажи Wir haben keine Milch. С яйцами тоже: Wir haben Eier → Wir haben keine Eier.", "Das ist ein Ei. Wir haben keine Eier.", [
       ["Слово", "Один предмет", "Отрицание"],
       ["der Apfel", "ein Apfel", "kein Apfel"], ["das Ei", "ein Ei", "kein Ei"],
       ["die Birne", "eine Birne", "keine Birne"], ["die Eier", "Eier", "keine Eier"]
     ], "", { translation: "Это яйцо. У нас нет яиц.", check: ["Как сказать «Это не груша»?", "Das ist keine Birne. У Birne артикль die."] }],
-    ["Одна булочка, две булочки: что меняется", "Множественное число бывает разным: Apfel получает умлаут, Ei получает -er, Banane получает -n, а Brötchen остаётся таким же. С числом «один» различай eins само по себе и ein перед словом: eins, но ein Ei.", "Ein Brötchen kostet zwei Franken. Drei Brötchen kosten sechs Franken.", null, "", { translation: "Одна булочка стоит два франка. Три булочки стоят шесть франков.", check: ["Как сказать «два яйца»?", "Zwei Eier. Die Eier — множественное число от das Ei."] }],
-    ["Пять реплик у прилавка", "Начни с Grüezi и Ich möchte …, bitte. Если спросят Sonst noch etwas?, добавь покупку или ответь Das ist alles, danke. Для цены спроси Wie viel kostet das? А Wo finde ich …? пригодится, если нужно найти товар.", "Wo finde ich den Zucker? Was kostet die Milch?", null, "", { translation: "Где найти сахар? Сколько стоит молоко?", check: ["Что значит Sonst noch etwas?", "«Что-нибудь ещё?» Можно ответить Das ist alles, danke."] }]
+    ["Два яйца, три булочки", "Ein Ei превращается в zwei Eier, у Apfel меняется гласная: zwei Äpfel. Форма Brötchen во множественном числе не меняется: ein Brötchen, zwei Brötchen.\n\nУчи слова парами и обращай внимание на глагол: одна булочка kostet, несколько kosten.", "Ein Brötchen kostet zwei Franken. Drei Brötchen kosten sechs Franken.", null, "", { translation: "Одна булочка стоит два франка. Три булочки стоят шесть франков.", check: ["Как сказать «два яйца»?", "Zwei Eier. Die Eier — множественное число от das Ei."] }],
+    ["У прилавка", "Начни с Grüezi! Ich möchte zwei Brötchen, bitte. Продавец спросит Sonst noch etwas? — «Что-нибудь ещё?» Если всё, скажи Das ist alles, danke.\n\nНе видишь товар? Спроси Wo finde ich …? Видишь товар, но не видишь цену? Was kostet das?", "Wo finde ich den Zucker? Was kostet die Milch?", null, "", { translation: "Где найти сахар? Сколько стоит молоко?", check: ["Что значит Sonst noch etwas?", "«Что-нибудь ещё?» Можно ответить Das ist alles, danke."] }]
   ],
   [
-    ["Артикль превращается в er, es или sie", "Сначала назови предмет, потом можешь говорить о нём коротко. Русский род может сбить: стол — «он», но немецкое Sofa среднего рода, поэтому es. Если предметов несколько, говори sie sind.", "Wo ist der Schlüssel? Er ist hier. Wo sind die Stühle? Sie sind dort.", [
+    ["Er, es или sie?", "Вместо названия предмета можно поставить местоимение. Выбирай его по немецкому роду: der Schlüssel → er, das Sofa → es, die Lampe → sie.\n\nДля нескольких предметов тоже sie, но глагол будет sind. Die Lampe ist dort. Sie ist dort. Die Stühle sind hier. Sie sind hier.", "Wo ist der Schlüssel? Er ist hier. Wo sind die Stühle? Sie sind dort.", [
       ["Предмет", "Короткое слово", "Пример"],
       ["der Tisch", "er", "Er ist neu."], ["das Bett", "es", "Es ist gross."], ["die Lampe", "sie", "Sie ist hell."], ["die Stühle", "sie", "Sie sind bequem."]
     ], "", { translation: "Где ключ? Он здесь. Где стулья? Они там.", check: ["Wo ist das Bett? ___ ist dort.", "Es ist dort. Das Bett → es."] }],
-    ["Nicht или kein: что именно отрицаешь", "Диван есть, но цвет не тот: Das Sofa ist nicht blau. Дивана вообще нет: Wir haben kein Sofa. Если хочешь сказать «здесь не живу», nicht ставь перед hier: Ich wohne nicht hier.", "Die Küche ist nicht gross. Wir haben keine Spülmaschine.", null, "", { translation: "Кухня не большая. У нас нет посудомоечной машины.", check: ["Как сказать «Стол не новый»?", "Der Tisch ist nicht neu. Отрицаем описание neu."] }],
-    ["Читаем объявление о квартире", "Сначала найди цену, количество комнат и дату. 2-Zimmer-Wohnung — двухкомнатная квартира, pro Monat — в месяц, ab Mai — с мая, möbliert — с мебелью. На осмотре пригодится Wie gross ist …? Узкую комнату можно описать словом schmal, тёмную — dunkel.", "Ist die Wohnung noch frei? Wie hoch ist die Miete?", null, "", { translation: "Квартира ещё свободна? Какая арендная плата?", check: ["Что значит ab sofort в объявлении?", "«Сразу», «уже сейчас». Квартира доступна прямо сейчас."] }]
+    ["Nicht или kein?", "Диван есть, но он серый: Das Sofa ist nicht blau. Дивана вообще нет: Wir haben kein Sofa.\n\nСпроси себя, что ты отрицаешь. «Не синий» — описание, поэтому nicht. «Нет дивана» — отсутствует предмет, поэтому kein.", "Die Küche ist nicht gross. Wir haben keine Spülmaschine.", null, "", { translation: "Кухня не большая. У нас нет посудомоечной машины.", check: ["Как сказать «Стол не новый»?", "Der Tisch ist nicht neu. Отрицаем описание neu."] }],
+    ["Объявление о квартире", "В объявлении обычно указаны цена, количество комнат и дата, с которой доступна квартира. 2-Zimmer-Wohnung — двухкомнатная квартира. Pro Monat — в месяц. Ab Mai — с мая. Möbliert — с мебелью.\n\nКогда позвонишь, начни с Ist die Wohnung noch frei? Если свободна, можно уточнить Wie hoch ist die Miete? Для цены пригодятся hundert — сто, tausend — тысяча и eine Million — миллион.", "Ist die Wohnung noch frei? Wie hoch ist die Miete?", null, "", { translation: "Квартира ещё свободна? Какая арендная плата?", check: ["Что значит ab sofort в объявлении?", "«Сразу», «уже сейчас». Квартира доступна прямо сейчас."] }]
   ],
   [
-    ["Приставка в вопросе тоже уходит в конец", "Проверь aufstehen в трёх фразах. В обычном предложении stehe занимает второе место. В вопросе без вопросительного слова stehst переходит в начало. В вопросе с Wann stehst снова на втором месте. Auf каждый раз остаётся в конце.", "Ich stehe früh auf. Stehst du früh auf? Wann stehst du auf?", null, "", { translation: "Я встаю рано. Ты встаёшь рано? Когда ты встаёшь?", check: ["Где поставить an в вопросе Wann fängt der Kurs …?", "В самом конце: Wann fängt der Kurs an?"] }],
-    ["Табло, часы и встреча", "У вопроса Wie spät ist es? задача узнать время сейчас. Wann beginnt …? спрашивает, во сколько что-то начнётся. Когда говоришь «в восемь», ставь um. Если речь о рабочем времени, ищи geöffnet и geschlossen.", "Es ist Viertel nach acht. Der Laden öffnet um halb neun.", [
+    ["Приставка в вопросе", "Из Du stehst früh auf сделай два вопроса: Stehst du früh auf? и Wann stehst du auf? В вопросе на «да» или «нет» stehst стоит первым, а после Wann — вторым.\n\nВ обоих вопросах приставка auf стоит в конце.", "Ich stehe früh auf. Stehst du früh auf? Wann stehst du auf?", null, "", { translation: "Я встаю рано. Ты встаёшь рано? Когда ты встаёшь?", check: ["Где поставить an в вопросе Wann fängt der Kurs …?", "В самом конце: Wann fängt der Kurs an?"] }],
+    ["Часы и встреча", "Es ist acht Uhr — сейчас восемь. Der Kurs beginnt um acht Uhr — курс начинается в восемь. В ответе на «во сколько?» появляется um.\n\nНа двери ищи geöffnet («открыто») и geschlossen («закрыто»). Если видишь ab neun Uhr, значит с девяти.", "Es ist Viertel nach acht. Der Laden öffnet um halb neun.", [
       ["На часах", "Как сказать"],
       ["08:00", "acht Uhr"], ["08:15", "Viertel nach acht"], ["08:30", "halb neun"], ["08:45", "Viertel vor neun"]
     ], "", { translation: "Сейчас четверть девятого. Магазин открывается в половине девятого.", check: ["Um halb acht — это в 7:30 или в 8:30?", "В 7:30. До восьми ещё полчаса."] }],
-    ["Меняем начало, сохраняем порядок", "Начни с человека, если главное — кто. Начни со времени, если главное — когда. Сравни Ich arbeite am Montag и Am Montag arbeite ich. Вторая фраза звучит естественно, когда речь уже о понедельнике. Am Montag занимает одно место, поэтому ich идёт после глагола.", "Ich hole die Kinder um vier Uhr ab. Um vier Uhr hole ich die Kinder ab.", null, "", { translation: "Я забираю детей в четыре часа. В четыре часа я забираю детей.", check: ["Начни с Am Abend: Ich koche am Abend.", "Am Abend koche ich."] }]
+    ["Меняем начало фразы", "Ich hole die Kinder um vier Uhr ab. Вынеси время вперёд: Um vier Uhr hole ich die Kinder ab. Hole осталось на втором месте, ab осталось в конце.\n\nПопробуй с Ich koche am Abend. Передвинь Am Abend, за ним поставь koche, затем ich.", "Ich hole die Kinder um vier Uhr ab. Um vier Uhr hole ich die Kinder ab.", null, "", { translation: "Я забираю детей в четыре часа. В четыре часа я забираю детей.", check: ["Начни с Am Abend: Ich koche am Abend.", "Am Abend koche ich."] }]
   ],
   [
-    ["Как заметить Akkusativ в своём ответе", "Найди глагол и спроси «кого или что я вижу, беру, покупаю?». Если ответ — существительное с der, проверь артикль. Сравни: Der Salat ist hier, а затем Ich nehme den Salat. Слово Salat осталось тем же, его роль изменилась.", "Ich nehme einen Salat. Ich nehme aber keinen Saft.", null, "", { translation: "Я возьму салат. Но сок я не возьму.", check: ["Ich sehe ___ Hund. Ein или einen?", "Einen. Hund — мужского рода, и это тот, кого я вижу."] }],
-    ["Три разных ответа на вопрос", "На Kommst du? подходят Ja, ich komme и Nein, ich komme nicht. На Kommst du nicht? ответ Doch означает «всё-таки приду», а Nein — «нет, не приду». Doch полезен, когда собеседник уже предположил «нет», а ты хочешь поправить.", "Hast du keinen Hunger? Doch, ich habe Hunger.", null, "", { translation: "Ты не голоден? Нет, как раз голоден.", check: ["Как ответить на Hast du keine Zeit?, если время у тебя есть?", "Doch, ich habe Zeit."] }],
-    ["Как рассказать о хобби и погоде", "Gern ставь после глагола: Ich lese gern. Lieber показывает предпочтение: Ich lese lieber, когда читать хочется больше, чем делать что-то другое. Для погоды собери простую фразу с Es: Es regnet, Es ist kalt, Es sind acht Grad.", "Heute ist es kalt. Ich bleibe lieber zu Hause.", null, "", { translation: "Сегодня холодно. Я лучше останусь дома.", check: ["Как сказать «Я люблю плавать» через gern?", "Ich schwimme gern."] }]
+    ["Салат и Akkusativ", "Собираешь заказ: Ich nehme … Спроси «Что я беру?» Если это der Salat, нужен einen Salat. Если это die Suppe, остаётся eine Suppe.\n\nПроверь и отрицание: keinen Salat, keine Suppe. Скажи вслух свой заказ: Ich nehme einen Tee und eine Suppe.", "Ich nehme einen Salat. Ich nehme aber keinen Saft.", null, "", { translation: "Я возьму салат. Но сок я не возьму.", check: ["Ich sehe ___ Hund. Ein или einen?", "Einen. Hund — мужского рода, и это тот, кого я вижу."] }],
+    ["Да, нет или всё-таки да?", "Сравни Hast du Zeit? и Hast du keine Zeit? Во втором вопросе человек уже предполагает «нет». Если время есть, ответь Doch, ich habe Zeit.\n\nПредставь, что тебе сказали «Ты не придёшь?», а ты отвечаешь «Как раз приду». Вот для этого и нужно doch.", "Hast du keinen Hunger? Doch, ich habe Hunger.", null, "", { translation: "Ты не голоден? Нет, как раз голоден.", check: ["Как ответить на Hast du keine Zeit?, если время у тебя есть?", "Doch, ich habe Zeit."] }],
+    ["Что нравится больше?", "Gern — «с удовольствием». Lieber — «охотнее», когда выбираешь из двух дел. Ich schwimme gern. Heute gehe ich lieber ins Kino.\n\nЕсли пошёл дождь, можно сказать Es regnet. Ich gehe lieber ins Kino. Хочешь позвать собеседника с собой? Wollen wir ins Kino gehen?", "Heute ist es kalt. Ich bleibe lieber zu Hause.", null, "", { translation: "Сегодня холодно. Я лучше останусь дома.", check: ["Как сказать «Я люблю плавать» через gern?", "Ich schwimme gern."] }]
   ],
   [
-    ["Три способа сказать, чего хочется", "Kann — могу, will — хочу, möchte — хотел бы. Will звучит прямее, поэтому в пекарне обычно уместнее möchte. Второе действие остаётся в начальной форме в конце: Ich möchte gehen, Ich will gehen, Ich kann gehen.", "Ich möchte bezahlen. Kann ich mit Karte bezahlen?", null, "", { translation: "Я хотел бы заплатить. Можно заплатить картой?", check: ["Как вежливо сказать «Я хотел бы заказать»?", "Ich möchte bestellen. Bestellen остаётся в конце."] }],
-    ["Собери Perfekt по шагам", "Сначала возьми форму haben или sein. Затем найди форму действия в прошлом и поставь её в конец. У обычных глаголов часто ge- и -t, у некоторых — ge- и -en. У отделяемых глаголов ge встаёт между приставкой и основой. Глаголы на -ieren обходятся без ge.", "Ich habe eingekauft. Meine Schwester hat telefoniert.", [
+    ["Хочу, могу, хотел бы", "Ich will bezahlen — «Я хочу заплатить». Ich möchte bezahlen — мягче: «Я хотел бы заплатить». Kann ich mit Karte bezahlen? — «Могу я заплатить картой?»\n\nВо всех трёх примерах bezahlen стоит в конце. Меняй первую часть, чтобы поменять смысл или задать вопрос.", "Ich möchte bezahlen. Kann ich mit Karte bezahlen?", null, "", { translation: "Я хотел бы заплатить. Можно заплатить картой?", check: ["Как вежливо сказать «Я хотел бы заказать»?", "Ich möchte bestellen. Bestellen остаётся в конце."] }],
+    ["Собираем Perfekt", "Выбери пару: hat gelernt или ist gegangen. Поменяй первую часть под того, о ком говоришь: ich habe gelernt, wir sind gegangen. Вторую часть поставь в конец.\n\nУ lernen форма gelernt начинается с ge-. У einkaufen ge ставится после приставки ein: eingekauft. У глаголов на -ieren ge не добавляется: telefoniert.", "Ich habe eingekauft. Meine Schwester hat telefoniert.", [
       ["Глагол", "Готовая пара"],
       ["lernen", "hat gelernt"], ["schreiben", "hat geschrieben"], ["einkaufen", "hat eingekauft"], ["telefonieren", "hat telefoniert"], ["aufstehen", "ist aufgestanden"]
     ], "", { translation: "Я сходил за покупками. Моя сестра поговорила по телефону.", check: ["Где поставить ge в Perfekt от einkaufen?", "Между ein и kauf: Ich habe eingekauft."] }],
-    ["Глагол в прошедшем: вопрос, ответ, отрицание", "В утверждении haben или sein занимают второе место. В вопросе на «да» или «нет» идут первыми. Когда отрицаешь действие целиком, nicht обычно ставится перед формой прошедшего: Ich bin nicht gekommen. Если сомневаешься какую пару выбрать, учи её целиком: hat gelernt, ist gegangen.", "Bist du gestern gekommen? Nein, ich bin nicht gekommen.", null, "", { translation: "Ты вчера пришёл? Нет, я не пришёл.", check: ["Как собрать «Вчера я пришёл вовремя», начиная с Gestern?", "Gestern bin ich pünktlich gekommen."] }]
+    ["Вопрос о вчерашнем", "Du bist gestern gekommen. Чтобы спросить, вынеси bist вперёд: Bist du gestern gekommen? Gekommen осталось на месте.\n\nЕсли ты не пришёл, скажи Nein, ich bin nicht gekommen. А чтобы узнать «когда», начни с Wann: Wann bist du gekommen?", "Bist du gestern gekommen? Nein, ich bin nicht gekommen.", null, "", { translation: "Ты вчера пришёл? Нет, я не пришёл.", check: ["Как собрать «Вчера я пришёл вовремя», начиная с Gestern?", "Gestern bin ich pünktlich gekommen."] }]
   ]
 ];
 
 for (const [index, topics] of theoryExtensions.entries()) {
   course[index].theory.push(...topics);
 }
+
+const testRules = [
+  [1, 1], [1, 2], [2, 0], [1, 1], [3, 5], [3, 3], [4, 4],
+  [4, 5], [5, 6], [5, 1], [6, 4], [6, 5], [7, 0], [7, 2]
+];
+const questionRules = new Map([
+  ...course.flatMap((lesson, index) => lesson.practice.map((question, position) => [question, lesson.theory[practiceRules[index][position]]])),
+  ...finalTest.map((question, index) => {
+    const [lesson, topic] = testRules[index];
+    return [question, course[lesson - 1].theory[topic]];
+  })
+]);
+
+const acceptedTranslations = new Map([
+  [course[0].practice[4], ["Aus der Schweiz komme ich"]],
+  [course[1].practice[4], ["Deutsch spricht meine Schwester"]],
+  [course[5].practice[4], ["Ich lese gerne"]],
+  [finalTest[1], ["Aus Österreich komme ich"]],
+  [finalTest[12], ["Deutsch will ich lernen"]]
+]);
 
 const uznachScenes = [
   {
@@ -935,7 +956,7 @@ const uznachScenes = [
       },
       platform: {
         line: "Ihr Zug fährt von Gleis zwei.",
-        task: ["Подтверди номер пути. Собери «С пути два?».", "Von Gleis zwei", "В ответах на вокзале пригодится готовый кусочек von Gleis … — с пути номер…", "order", ["zwei", "Von", "Gleis"]],
+        task: ["Подтверди номер пути. Собери «С пути два?».", "Von Gleis zwei", "В ответах на вокзале можно сказать von Gleis … — с пути номер…", "order", ["zwei", "Von", "Gleis"]],
         next: "askTime", rule: course[4].theory[5]
       },
       askPlatform: {
@@ -1396,22 +1417,27 @@ die Schülerin|Die Schülerin schreibt einen Brief.
 das Billett|Ich kaufe ein Billett für den Zug.
 die Schulreise|Morgen macht die Klasse eine Schulreise.
 der Ausflug|Am Sonntag machen wir einen Ausflug.
+der Kunde|Der Kunde bezahlt an der Kasse.
+die Pause|Wir machen jetzt eine Pause.
+der Wetterbericht|Im Wetterbericht steht: Morgen regnet es.
+das Problem|Wir haben ein kleines Problem.
+der Schweizer|Mein Nachbar ist Schweizer.
 `.trim().split("\n").map(line => line.split("|")));
 
 const countries = new Set("Deutschland Österreich Polen Spanien Ungarn Rumänien Syrien Frankreich Italien Griechenland".split(" "));
 const languages = new Set("Deutsch Polnisch Türkisch Spanisch Ungarisch Rumänisch Arabisch Französisch Italienisch Griechisch".split(" "));
 
 function cardExample(word, lessonId) {
+  if (word === "machen" && lessonId === 3) return "Das macht zusammen fünf Franken.";
   if (word === "alt" && lessonId === 4) return "Der Schrank ist alt.";
   if (word === "finden" && lessonId === 4) return "Ich finde das Zimmer schön.";
   if (wordExamples.has(word)) return wordExamples.get(word);
   if (countries.has(word)) return `Meine Freundin kommt aus ${word}.`;
   if (languages.has(word)) return `Wir sprechen ${word}.`;
-  const accusative = word.replace(/^der /, "den ");
-  if (lessonId === 3) return `Ich suche ${accusative} im Laden.`;
-  if (lessonId === 4) return `Das Inserat zeigt ${accusative}.`;
+  const subject = word[0].toUpperCase() + word.slice(1);
+  if (lessonId === 3) return `${subject} ist im Angebot.`;
   if (lessonId === 5 && /^der (Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)$/.test(word)) {
     return `Am ${word.slice(4)} habe ich Zeit.`;
   }
-  return `${word[0].toUpperCase() + word.slice(1)} ist hier.`;
+  return `${subject} ist hier.`;
 }
