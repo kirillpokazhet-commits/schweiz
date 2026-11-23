@@ -167,9 +167,10 @@ function speak(button) {
 }
 
 function wordsFor(lesson) {
-  return lesson.words.map(([word, translation, legacyKey], index) => ({
-    key: `${lesson.id}:${index}`, word, translation, legacyKey
-  }));
+  return lesson.words.map(([word, translation, legacyKey], index) => {
+    const [front, plural] = word.split(" · ");
+    return { key: `${lesson.id}:${index}`, word, front, plural, translation, legacyKey, lessonId: lesson.id };
+  });
 }
 
 function lessonProgress(lesson) {
@@ -209,7 +210,7 @@ function renderNavigation() {
 
 function readRoute() {
   clearTimeout(reviewTimer);
-  const [id, section] = location.hash.slice(1).split("/");
+  const [id, section, topic] = location.hash.slice(1).split("/");
   const lesson = course.find(item => String(item.id) === id);
   const globalWords = id === "words" || (id === "final" && section === "words");
   const final = id === "final" && !globalWords;
@@ -219,7 +220,7 @@ function readRoute() {
   view = {
     id: globalWords ? "words" : final ? "final" : lesson ? String(lesson.id) : "home",
     section: tabs.includes(section) ? section : tabs[0],
-    lesson, final, home, globalWords
+    lesson, final, home, globalWords, topic
   };
   elements.overview.hidden = !home;
   elements.hero.classList.toggle("home-hero", home);
@@ -263,7 +264,8 @@ function readRoute() {
     <a href="#${view.id}/${tab}" ${view.section === tab ? 'aria-current="page"' : ""}>${labels[tab]}</a>`).join("");
   if (view.section === "theory") renderTheory();
   if (view.section === "grammar") {
-    show("Шпаргалка по грамматике", "Повтори перед тестом · Учебник, стр. 204–207", theoryCards(grammarReview));
+    show("Шпаргалка по грамматике", "Повтори перед тестом · Учебник, стр. 204–207",
+      theoryIndex(grammarReview, "#final/grammar") + theoryCards(grammarReview));
   }
   if (view.section === "words") openWords();
   if (view.section === "practice" || view.section === "test") openPractice();
@@ -300,29 +302,48 @@ function openSceneStep(id) {
 }
 
 function errorRule(question, rule = questionRules.get(question)) {
+  const lesson = rule && course.find(item => item.theory.includes(rule));
+  const reviewIndex = grammarReview.indexOf(rule);
+  const ruleHref = lesson ? `#${lesson.id}/theory/${lesson.theory.indexOf(rule) + 1}`
+    : reviewIndex >= 0 ? `#final/grammar/${reviewIndex + 1}` : "";
   return `<div class="error-rule">
     <strong>Правило</strong><p>${question[2]}</p>
     ${rule ? `<details><summary>${rule[0]}</summary><p>${rule[1]}</p>
-      <div class="example"><span lang="de-CH">${rule[2]}</span>${audioButton()}</div></details>` : ""}
+      <div class="example"><span lang="de-CH">${rule[2]}</span>${audioButton()}</div>
+      ${ruleHref ? `<a class="theory-link" href="${ruleHref}" target="_blank" rel="noopener">Открыть в теории (новая вкладка)</a>` : ""}</details>` : ""}
   </div>`;
 }
 
+function theoryIndex(items, href) {
+  return `<nav class="theory-index panel" aria-label="Темы">
+    <strong>Темы</strong>
+    <ul>${items.map(([title], index) => `<li><a href="${href}/${index + 1}">${title}</a></li>`).join("")}</ul>
+  </nav>`;
+}
+
 function theoryCards(items) {
-  return `<div class="stack">${items.map(([title, description, example, table, note]) => `
-      <article class="panel"><h3>${title}</h3><p>${description}</p>
+  return `<div class="stack">${items.map(([title, description, example, table, note, extra], index) => `
+      <article class="panel theory-topic" id="topic-${index + 1}" aria-labelledby="topic-title-${index + 1}">
+      <h3 id="topic-title-${index + 1}" tabindex="-1">${title}</h3><p>${description}</p>
       ${table ? `<div class="grammar-wrap"><table class="grammar">
         <thead><tr>${table[0].map(cell => `<th scope="col">${cell}</th>`).join("")}</tr></thead>
         <tbody>${table.slice(1).map(([pronoun, ...forms]) => `
           <tr><th scope="row">${pronoun}</th>${forms.map(form => `<td>${form}</td>`).join("")}</tr>
         `).join("")}</tbody>
       </table></div>` : ""}
-      <div class="example"><span lang="de-CH">${example}</span>${audioButton()}${note ? `<p>${note}</p>` : ""}</div></article>`).join("")}</div>`;
+      <div class="example"><span lang="de-CH">${example}</span>${audioButton()}
+      ${extra?.translation ? `<p class="muted">${extra.translation}</p>` : ""}
+      ${note ? `<p>${note}</p>` : ""}</div>
+      ${extra?.check ? `<details class="theory-check"><summary>Проверь себя</summary>
+        <p>${extra.check[0]}</p><details><summary>Показать ответ</summary><p>${extra.check[1]}</p></details>
+      </details>` : ""}</article>`).join("")}</div>`;
 }
 
 function renderTheory() {
   const { lesson } = view;
   elements.content.innerHTML = `<h2 id="section-title" class="sr-only">Теория</h2>
     <p class="theory-reference"><span lang="de-CH">${lesson.german}</span> · Учебник, стр. ${lesson.pages}</p>
+    ${theoryIndex(lesson.theory, `#${view.id}/theory`)}
     ${theoryCards(lesson.theory)}
     <div class="actions">
       <button class="primary" data-action="read">${saved.theory[lesson.id] ? "Прочитано ✓" : "Отметить прочитанным"}</button>
@@ -348,7 +369,7 @@ function openWords(freeReview = !view.globalWords) {
   const fresh = cards.filter(card => !saved.cards[card.key]);
   study = {
     cards, queue: freeReview ? shuffleCards(cards) : [...due, ...fresh.slice(0, 12)],
-    reviewed: 0, revealed: false, freeReview
+    reviewed: 0, flipped: false, freeReview
   };
   renderWords();
 }
@@ -386,20 +407,27 @@ function renderWords() {
     <dt><span lang="de-CH">${item.word}</span>${audioButton()}</dt><dd>${item.translation}</dd>`).join("");
   const viewed = study.cards.length - study.queue.length;
   const counter = study.freeReview ? `${viewed + 1} из ${study.cards.length}` : `В очереди ${study.queue.length}`;
+  const example = card && cardExample(card.front, card.lessonId);
   const panel = card ? `
-    <div class="panel">
-      <div class="spread"><strong>Карточка</strong><small>${counter}</small></div>
-      <div class="panel flashcard">
-        <div><h3 lang="de-CH">${card.word}</h3>${audioButton()}</div>
-        <p class="${study.revealed ? "translation" : "muted"}" aria-live="polite">${study.revealed ? card.translation : "Вспомни перевод"}</p>
-      </div>
-      <div class="actions">${study.revealed ? study.freeReview
+    <div class="panel card-study">
+      <div class="spread card-toolbar"><small>${counter}</small>
+        <div><span hidden id="card-audio-text" lang="de-CH">${card.front}</span>${audioButton()}</div></div>
+      <button class="flashcard" type="button" data-action="reveal" aria-expanded="false" aria-controls="card-back">
+        <span class="card-face card-front">
+          <strong lang="de-CH">${card.front}</strong><small>Нажми, чтобы перевернуть</small>
+        </span>
+        <span class="card-face card-back" id="card-back" aria-hidden="true">
+          <strong class="translation">${card.translation}</strong>
+          ${card.plural ? `<small lang="de-CH">${card.plural}</small>` : ""}
+          <span class="card-example" lang="de-CH">${example}</span>
+        </span>
+      </button>
+      <div class="actions card-actions" hidden>${study.freeReview
         ? '<button class="primary" data-action="next-card">Следующая карточка</button>'
         : `<div class="ratings">${Object.entries(ratings).map(([rating, label]) => `
           <button ${rating === "good" ? 'class="primary"' : ""} data-action="rate-card" data-rating="${rating}">
             <strong>${label}</strong><small>${formatReviewDelay(delays[rating])}</small>
-          </button>`).join("")}</div>`
-        : '<button class="primary" data-action="reveal">Показать перевод</button>'}</div>
+          </button>`).join("")}</div>`}</div>
     </div>` : `
     <div class="panel"><h3>${study.freeReview ? "Свободное повторение завершено" : newCount ? "Подход завершён" : "Сейчас очередь пуста"}</h3>
     ${study.reviewed ? `<p>Оценок за подход: ${study.reviewed}.</p>` : ""}
@@ -419,6 +447,17 @@ function renderWords() {
   else show("Слова лекции", description, `${panel}${dictionary}`);
 }
 
+function flipCard(button) {
+  study.flipped = !study.flipped;
+  button.classList.toggle("is-flipped", study.flipped);
+  button.setAttribute("aria-expanded", String(study.flipped));
+  button.querySelector(".card-front").setAttribute("aria-hidden", String(study.flipped));
+  button.querySelector(".card-back").setAttribute("aria-hidden", String(!study.flipped));
+  elements.content.querySelector(".card-actions").hidden = false;
+  const card = study.queue[0];
+  document.getElementById("card-audio-text").textContent = study.flipped ? cardExample(card.front, card.lessonId) : card.front;
+}
+
 function gradeCard(rating) {
   const card = study.queue.shift();
   const interval = reviewDelays(card)[rating];
@@ -429,7 +468,7 @@ function gradeCard(rating) {
   const pending = new Set(study.queue.map(item => item.key));
   const ready = study.cards.filter(item => !pending.has(item.key) && saved.cards[item.key]?.due <= Date.now());
   study.queue.push(...ready);
-  study.revealed = false;
+  study.flipped = false;
   persist();
   renderWords();
 }
@@ -608,15 +647,11 @@ elements.content.addEventListener("click", event => {
       break;
     case "all-words": openWords(true); elements.content.querySelector('[data-action="reveal"]').focus(); break;
     case "scheduled-words": openWords(); elements.content.querySelector("[data-action='reveal'], [data-action='all-words']").focus(); break;
-    case "reveal":
-      study.revealed = true;
-      renderWords();
-      elements.content.querySelector(".ratings .primary, [data-action='next-card']").focus();
-      break;
+    case "reveal": flipCard(button); break;
     case "rate-card": gradeCard(button.dataset.rating); elements.content.querySelector("[data-action='reveal'], [data-action='scheduled-words'], [data-action='all-words']").focus(); break;
     case "next-card":
       study.queue.shift();
-      study.revealed = false;
+      study.flipped = false;
       renderWords();
       elements.content.querySelector("[data-action='reveal'], [data-action='scheduled-words'], [data-action='all-words']").focus();
       break;
@@ -649,12 +684,22 @@ elements.content.addEventListener("click", event => {
   }
 });
 
+function focusTheoryTopic() {
+  if (!["theory", "grammar"].includes(view.section) || !/^\d+$/.test(view.topic || "")) return false;
+  const heading = document.getElementById(`topic-title-${view.topic}`);
+  if (!heading) return false;
+  heading.closest("article").scrollIntoView({ block: "start" });
+  heading.focus({ preventScroll: true, focusVisible: false });
+  return true;
+}
+
 function navigate() {
   readRoute();
+  if (focusTheoryTopic()) return;
   window.scrollTo(0, 0);
   const heading = elements.hero.querySelector("h1");
   heading.tabIndex = -1;
-  heading.focus({ preventScroll: true });
+  heading.focus({ preventScroll: true, focusVisible: false });
 }
 window.addEventListener("hashchange", () => {
   if (document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -664,3 +709,4 @@ window.addEventListener("hashchange", () => {
   }
 });
 readRoute();
+focusTheoryTopic();

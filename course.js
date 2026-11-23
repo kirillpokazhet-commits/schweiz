@@ -816,6 +816,69 @@ const questionRules = new Map([
   ...finalTest.map((question, index) => [question, grammarReview[testRules[index]]])
 ]);
 
+// Optional lesson cards add a translation and a self-check to the usual example.
+const theoryExtensions = [
+  [
+    ["Пять вопросов для знакомства", "Вопросительное слово задаёт направление. Wer просит назвать человека, wie — имя или способ, wo — место, woher — откуда человек приехал, was — что именно. Затем ставь глагол, потом того, к кому обращаешься.", "Wo wohnen Sie? Woher kommen Sie?", [
+      ["Слово", "Что спрашивает", "Пример"],
+      ["wer", "кто", "Wer ist das?"], ["wie", "как", "Wie heisst du?"], ["wo", "где", "Wo wohnst du?"], ["woher", "откуда", "Woher kommst du?"], ["was", "что", "Was ist das?"]
+    ], "", { translation: "Где вы живёте? Откуда вы родом?", check: ["Как спросить у друга, откуда он?", "Woher kommst du? Woher спрашивает о происхождении."] }],
+    ["Heissen или sein: два способа представиться", "Ich heisse Mia и Ich bin Mia оба подходят при знакомстве. Есть и третья фраза: Mein Name ist Mia. В ней подлежащее Mein Name можно считать одним кусочком. Поэтому ist всё равно на втором месте.", "Ich heisse Mia. Mein Name ist Mia.", null, "", { translation: "Меня зовут Миа. Моё имя — Миа.", check: ["Почему в Mein Name ist Mia используется ist?", "Mein Name — «моё имя», это как er. Поэтому ist, как в er ist."] }],
+    ["Как переспросить и назвать имя по буквам", "Wie bitte? пригодится, когда не расслышал. Langsam, bitte — «медленно, пожалуйста». В немецком написании фамилии могут встретиться ä, ö, ü. В швейцарском стандартном немецком вместо ß пишут ss: heissen, Strasse.", "Wie bitte? Können Sie Ihren Namen buchstabieren?", null, "", { translation: "Простите? Можете произнести своё имя по буквам?", check: ["Что сказать, если собеседник говорит быстро?", "Langsam, bitte. — «Медленнее, пожалуйста»."] }]
+  ],
+  [
+    ["Das ist или Das sind?", "Das может указывать и на одного человека, и на группу. Меняется глагол. Представляешь брата — Das ist mein Bruder. Показываешь на родителей — Das sind meine Eltern. Родители всегда идут во множественном числе, даже если на фото никто не улыбнулся.", "Das ist meine Schwester. Das sind meine Geschwister.", null, "", { translation: "Это моя сестра. Это мои братья и сёстры.", check: ["Das ___ meine Grosseltern. Ist или sind?", "Sind, потому что die Grosseltern — множественное число."] }],
+    ["Sie и sie: смотри на глагол", "Sie wohnen — «вы живёте» при вежливом обращении, sie wohnen — «они живут». А sie wohnt — «она живёт». Если слово в начале предложения, оно всегда с большой буквы, поэтому ориентируйся на глагол и ситуацию.", "Sie wohnt in Bern. Ihre Eltern wohnen in Basel.", null, "", { translation: "Она живёт в Берне. Её родители живут в Базеле.", check: ["В Sie leben in Bern речь об одной женщине?", "Форма leben здесь означает «они живут» или «вы живёте». Для одной женщины было бы Sie lebt."] }],
+    ["Числа до двадцати и телефон", "В телефоне можно говорить цифры по одной. От 13 до 19 слышится zehn: dreizehn, vierzehn. Запомни формы без лишних букв: sechzehn и siebzehn. Двадцать — zwanzig.", "Meine Nummer beginnt mit null, sieben, neun.", [
+      ["Цифры", "По-немецки"],
+      ["0–4", "null, eins, zwei, drei, vier"], ["5–9", "fünf, sechs, sieben, acht, neun"],
+      ["10–14", "zehn, elf, zwölf, dreizehn, vierzehn"], ["15–20", "fünfzehn, sechzehn, siebzehn, achtzehn, neunzehn, zwanzig"]
+    ], "", { translation: "Мой номер начинается с нуля, семёрки, девятки.", check: ["Как сказать «мне семнадцать лет»?", "Ich bin siebzehn Jahre alt. Возраст говорим с bin."] }]
+  ],
+  [
+    ["Артикль зависит от того, что ты хочешь сказать", "Представляешь предмет впервые — ein или eine. Показываешь, что его нет, — kein или keine. У неисчисляемых продуктов часто нет артикля: Ich kaufe Milch. Но «молока нет» — Ich habe keine Milch.", "Das ist ein Ei. Wir haben keine Eier.", [
+      ["Слово", "Один предмет", "Отрицание"],
+      ["der Apfel", "ein Apfel", "kein Apfel"], ["das Ei", "ein Ei", "kein Ei"],
+      ["die Birne", "eine Birne", "keine Birne"], ["die Eier", "Eier", "keine Eier"]
+    ], "", { translation: "Это яйцо. У нас нет яиц.", check: ["Как сказать «Это не груша»?", "Das ist keine Birne. У Birne артикль die."] }],
+    ["Одна булочка, две булочки: что меняется", "Множественное число бывает разным: Apfel получает умлаут, Ei получает -er, Banane получает -n, а Brötchen остаётся таким же. С числом «один» различай eins само по себе и ein перед словом: eins, но ein Ei.", "Ein Brötchen kostet zwei Franken. Drei Brötchen kosten sechs Franken.", null, "", { translation: "Одна булочка стоит два франка. Три булочки стоят шесть франков.", check: ["Как сказать «два яйца»?", "Zwei Eier. Die Eier — множественное число от das Ei."] }],
+    ["Пять реплик у прилавка", "Начни с Grüezi и Ich möchte …, bitte. Если спросят Sonst noch etwas?, добавь покупку или ответь Das ist alles, danke. Для цены спроси Wie viel kostet das? А Wo finde ich …? пригодится, если нужно найти товар.", "Wo finde ich den Zucker? Was kostet die Milch?", null, "", { translation: "Где найти сахар? Сколько стоит молоко?", check: ["Что значит Sonst noch etwas?", "«Что-нибудь ещё?» Можно ответить Das ist alles, danke."] }]
+  ],
+  [
+    ["Артикль превращается в er, es или sie", "Сначала назови предмет, потом можешь говорить о нём коротко. Русский род может сбить: стол — «он», но немецкое Sofa среднего рода, поэтому es. Если предметов несколько, говори sie sind.", "Wo ist der Schlüssel? Er ist hier. Wo sind die Stühle? Sie sind dort.", [
+      ["Предмет", "Короткое слово", "Пример"],
+      ["der Tisch", "er", "Er ist neu."], ["das Bett", "es", "Es ist gross."], ["die Lampe", "sie", "Sie ist hell."], ["die Stühle", "sie", "Sie sind bequem."]
+    ], "", { translation: "Где ключ? Он здесь. Где стулья? Они там.", check: ["Wo ist das Bett? ___ ist dort.", "Es ist dort. Das Bett → es."] }],
+    ["Nicht или kein: что именно отрицаешь", "Диван есть, но цвет не тот: Das Sofa ist nicht blau. Дивана вообще нет: Wir haben kein Sofa. Если хочешь сказать «здесь не живу», nicht ставь перед hier: Ich wohne nicht hier.", "Die Küche ist nicht gross. Wir haben keine Spülmaschine.", null, "", { translation: "Кухня не большая. У нас нет посудомоечной машины.", check: ["Как сказать «Стол не новый»?", "Der Tisch ist nicht neu. Отрицаем описание neu."] }],
+    ["Читаем объявление о квартире", "Сначала найди цену, количество комнат и дату. 2-Zimmer-Wohnung — двухкомнатная квартира, pro Monat — в месяц, ab Mai — с мая, möbliert — с мебелью. На осмотре пригодится Wie gross ist …? Узкую комнату можно описать словом schmal, тёмную — dunkel.", "Ist die Wohnung noch frei? Wie hoch ist die Miete?", null, "", { translation: "Квартира ещё свободна? Какая арендная плата?", check: ["Что значит ab sofort в объявлении?", "«Сразу», «уже сейчас». Квартира доступна прямо сейчас."] }]
+  ],
+  [
+    ["Приставка в вопросе тоже уходит в конец", "Проверь aufstehen в трёх фразах. В обычном предложении stehe занимает второе место. В вопросе без вопросительного слова stehst переходит в начало. В вопросе с Wann stehst снова на втором месте. Auf каждый раз остаётся в конце.", "Ich stehe früh auf. Stehst du früh auf? Wann stehst du auf?", null, "", { translation: "Я встаю рано. Ты встаёшь рано? Когда ты встаёшь?", check: ["Где поставить an в вопросе Wann fängt der Kurs …?", "В самом конце: Wann fängt der Kurs an?"] }],
+    ["Табло, часы и встреча", "У вопроса Wie spät ist es? задача узнать время сейчас. Wann beginnt …? спрашивает, во сколько что-то начнётся. Когда говоришь «в восемь», ставь um. Если речь о рабочем времени, ищи geöffnet и geschlossen.", "Es ist Viertel nach acht. Der Laden öffnet um halb neun.", [
+      ["На часах", "Как сказать"],
+      ["08:00", "acht Uhr"], ["08:15", "Viertel nach acht"], ["08:30", "halb neun"], ["08:45", "Viertel vor neun"]
+    ], "", { translation: "Сейчас четверть девятого. Магазин открывается в половине девятого.", check: ["Um halb acht — это в 7:30 или в 8:30?", "В 7:30. До восьми ещё полчаса."] }],
+    ["Меняем начало, сохраняем порядок", "Начни с человека, если главное — кто. Начни со времени, если главное — когда. Сравни Ich arbeite am Montag и Am Montag arbeite ich. Вторая фраза звучит естественно, когда речь уже о понедельнике. Am Montag занимает одно место, поэтому ich идёт после глагола.", "Ich hole die Kinder um vier Uhr ab. Um vier Uhr hole ich die Kinder ab.", null, "", { translation: "Я забираю детей в четыре часа. В четыре часа я забираю детей.", check: ["Начни с Am Abend: Ich koche am Abend.", "Am Abend koche ich."] }]
+  ],
+  [
+    ["Как заметить Akkusativ в своём ответе", "Найди глагол и спроси «кого или что я вижу, беру, покупаю?». Если ответ — существительное с der, проверь артикль. Сравни: Der Salat ist hier, а затем Ich nehme den Salat. Слово Salat осталось тем же, его роль изменилась.", "Ich nehme einen Salat. Ich nehme aber keinen Saft.", null, "", { translation: "Я возьму салат. Но сок я не возьму.", check: ["Ich sehe ___ Hund. Ein или einen?", "Einen. Hund — мужского рода, и это тот, кого я вижу."] }],
+    ["Три разных ответа на вопрос", "На Kommst du? подходят Ja, ich komme и Nein, ich komme nicht. На Kommst du nicht? ответ Doch означает «всё-таки приду», а Nein — «нет, не приду». Doch полезен, когда собеседник уже предположил «нет», а ты хочешь поправить.", "Hast du keinen Hunger? Doch, ich habe Hunger.", null, "", { translation: "Ты не голоден? Нет, как раз голоден.", check: ["Как ответить на Hast du keine Zeit?, если время у тебя есть?", "Doch, ich habe Zeit."] }],
+    ["Как рассказать о хобби и погоде", "Gern ставь после глагола: Ich lese gern. Lieber показывает предпочтение: Ich lese lieber, когда читать хочется больше, чем делать что-то другое. Для погоды собери простую фразу с Es: Es regnet, Es ist kalt, Es sind acht Grad.", "Heute ist es kalt. Ich bleibe lieber zu Hause.", null, "", { translation: "Сегодня холодно. Я лучше останусь дома.", check: ["Как сказать «Я люблю плавать» через gern?", "Ich schwimme gern."] }]
+  ],
+  [
+    ["Три способа сказать, чего хочется", "Kann — могу, will — хочу, möchte — хотел бы. Will звучит прямее, поэтому в пекарне обычно уместнее möchte. Второе действие остаётся в начальной форме в конце: Ich möchte gehen, Ich will gehen, Ich kann gehen.", "Ich möchte bezahlen. Kann ich mit Karte bezahlen?", null, "", { translation: "Я хотел бы заплатить. Можно заплатить картой?", check: ["Как вежливо сказать «Я хотел бы заказать»?", "Ich möchte bestellen. Bestellen остаётся в конце."] }],
+    ["Собери Perfekt по шагам", "Сначала возьми форму haben или sein. Затем найди форму действия в прошлом и поставь её в конец. У обычных глаголов часто ge- и -t, у некоторых — ge- и -en. У отделяемых глаголов ge встаёт между приставкой и основой. Глаголы на -ieren обходятся без ge.", "Ich habe eingekauft. Meine Schwester hat telefoniert.", [
+      ["Глагол", "Готовая пара"],
+      ["lernen", "hat gelernt"], ["schreiben", "hat geschrieben"], ["einkaufen", "hat eingekauft"], ["telefonieren", "hat telefoniert"], ["aufstehen", "ist aufgestanden"]
+    ], "", { translation: "Я сходил за покупками. Моя сестра поговорила по телефону.", check: ["Где поставить ge в Perfekt от einkaufen?", "Между ein и kauf: Ich habe eingekauft."] }],
+    ["Глагол в прошедшем: вопрос, ответ, отрицание", "В утверждении haben или sein занимают второе место. В вопросе на «да» или «нет» идут первыми. Когда отрицаешь действие целиком, nicht обычно ставится перед формой прошедшего: Ich bin nicht gekommen. Если сомневаешься какую пару выбрать, учи её целиком: hat gelernt, ist gegangen.", "Bist du gestern gekommen? Nein, ich bin nicht gekommen.", null, "", { translation: "Ты вчера пришёл? Нет, я не пришёл.", check: ["Как собрать «Вчера я пришёл вовремя», начиная с Gestern?", "Gestern bin ich pünktlich gekommen."] }]
+  ]
+];
+
+for (const [index, topics] of theoryExtensions.entries()) {
+  course[index].theory.push(...topics);
+}
+
 const uznachScenes = [
   {
     id: "bakery", title: "В пекарне", goal: "Закажи булочки или кофе и узнай цену.",
@@ -922,3 +985,433 @@ const uznachScenes = [
     }
   }
 ];
+// Short examples for words whose use cannot be inferred from an article.
+const wordExamples = new Map(`
+Grüezi|Grüezi, Frau Keller!
+Guten Morgen|Guten Morgen, Paul!
+Auf Wiedersehen|Vielen Dank und auf Wiedersehen!
+heissen|Ich heisse Nina.
+kommen|Ich komme aus Italien.
+sprechen|Wir sprechen Deutsch.
+aus|Ich komme aus der Schweiz.
+buchstabieren|Buchstabieren Sie bitte Ihren Namen.
+anschauen|Schau das Bild an.
+hören|Ich höre Musik.
+noch einmal|Sag das bitte noch einmal.
+ankreuzen|Kreuze die richtige Antwort an.
+zuordnen|Ordne die Wörter den Bildern zu.
+ergänzen|Ergänze den Satz.
+machen|Ich mache eine Pause.
+lesen|Ich lese ein Buch.
+spielen|Wir spielen Fussball.
+suchen|Ich suche meine Tasche.
+zeigen|Zeig mir bitte das Bild.
+fragen|Ich frage meine Lehrerin.
+markieren|Markiere das richtige Wort.
+nachsprechen|Hör zu und sprich den Satz nach.
+raten|Rate mal!
+meinen|Was meinst du?
+sagen|Sag bitte deinen Namen.
+notieren|Ich notiere die Telefonnummer.
+vergleichen|Wir vergleichen die Antworten.
+schreiben|Ich schreibe einen Brief.
+variieren|Wir variieren den Dialog.
+erzählen|Ich erzähle von meiner Familie.
+arbeiten|Ich arbeite in Uznach.
+zeichnen|Ich zeichne ein Haus.
+verbinden|Verbinde die Wörter mit den Bildern.
+richtig|Die Antwort ist richtig.
+ich|Ich wohne hier.
+sein|Ich bin müde.
+und|Ich kaufe Brot und Milch.
+ein bisschen|Ich spreche ein bisschen Deutsch.
+Guten Tag|Guten Tag, Herr Meier!
+Hallo|Hallo, wie geht es dir?
+Tschüss|Tschüss, bis morgen!
+Guten Abend|Guten Abend, Frau Keller!
+willkommen|Willkommen in Uznach!
+bei|Ich bin bei meiner Schwester.
+international|Der Kurs ist international.
+danke|Danke für deine Hilfe!
+Gute Nacht|Gute Nacht, bis morgen!
+wie|Wie heissen Sie?
+Sie|Sprechen Sie Deutsch?
+wer|Wer ist das?
+ja|Ja, das stimmt.
+stimmen|Das stimmt.
+nein|Nein, danke.
+nicht|Das Zimmer ist nicht teuer.
+woher|Woher kommst du?
+du|Wo wohnst du?
+aha|Aha, jetzt verstehe ich!
+toll|Das ist toll!
+interessant|Der Film ist interessant.
+nur|Ich möchte nur Wasser.
+was|Was möchtest du?
+auch|Ich komme auch.
+Wie bitte?|Wie bitte? Können Sie das wiederholen?
+bitte|Einen Tee, bitte.
+da sein|Meine Schwester ist schon da.
+gut|Mir geht es gut.
+Vielen Dank|Vielen Dank für den Anruf!
+Auf Wiederhören|Danke für den Anruf. Auf Wiederhören!
+wohnen|Wir wohnen in Uznach.
+haben|Wir haben zwei Kinder.
+zwölf|Meine Tochter ist zwölf Jahre alt.
+lernen|Ich lerne Deutsch.
+alt|Wie alt bist du?
+leben|Meine Eltern leben in Bern.
+in|Ich wohne in Uznach.
+super|Der Kurs ist super!
+sehr|Die Wohnung ist sehr hell.
+ach|Ach, das ist schade.
+so|Das ist nicht so teuer.
+mein / meine|Das ist mein Bruder, und das ist meine Schwester.
+dein / deine|Wo ist dein Buch? Wo ist deine Tasche?
+Ihr / Ihre|Wie ist Ihr Name? Wie ist Ihre Adresse?
+falsch|Die Nummer ist falsch.
+genau|Ja, genau so!
+sie|Sie wohnt in Bern. Ihre Eltern wohnen auch dort.
+zusammen|Wir wohnen zusammen.
+geschieden|Meine Eltern sind geschieden.
+er|Er kommt aus Spanien.
+jetzt|Ich gehe jetzt nach Hause.
+ihr|Wo wohnt ihr?
+wir|Wir lernen zusammen.
+wo|Wo ist die Küche?
+geboren|Ich bin in Bern geboren.
+verheiratet|Sie ist verheiratet.
+ledig|Er ist ledig.
+verwitwet|Meine Grossmutter ist verwitwet.
+lange|Wir wohnen schon lange hier.
+Nord-|Sie wohnt in Norddeutschland.
+Süd-|Er wohnt in Süddeutschland.
+ein Kilo|Ich möchte ein Kilo Äpfel.
+kosten|Was kostet das Brot?
+Ich möchte …|Ich möchte zwei Brötchen, bitte.
+brauchen|Wir brauchen Milch.
+kaufen|Ich kaufe ein Brot.
+helfen|Kann ich Ihnen helfen?
+natürlich|Ja, natürlich!
+hier|Hier ist Ihr Kaffee.
+ein / eine|Das ist ein Ei und eine Tomate.
+kein / keine|Ich habe kein Brot und keine Milch.
+wie viel|Wie viel kostet das?
+noch|Ich brauche noch zwei Eier.
+alles|Das ist alles, danke.
+finden|Wo finde ich die Milch?
+gern|Ich lese gern.
+für|Das Getränk ist für dich.
+dort|Dort ist der Bahnhof.
+teuer|Die Wohnung ist teuer.
+neu|Der Kühlschrank ist neu.
+gross|Das Zimmer ist gross.
+klein|Die Küche ist klein.
+hell|Das Wohnzimmer ist hell.
+dunkel|Im Gang ist es dunkel.
+billig|Der Stuhl ist billig.
+schön|Der Balkon ist schön.
+hässlich|Ich finde das Sofa hässlich.
+kennen|Ich kenne den Lehrer.
+aber|Das Zimmer ist klein, aber hell.
+schmal|Der Gang ist schmal.
+breit|Der Tisch ist zu breit.
+gefallen|Das Sofa gefällt mir.
+schlecht|Das Wetter ist schlecht.
+modern|Die Küche ist modern.
+schwarz|Der Tisch ist schwarz.
+grau|Das Sofa ist grau.
+weiss|Die Wände sind weiss.
+grün|Die Tür ist grün.
+braun|Der Schrank ist braun.
+blau|Mein Zimmer ist blau.
+rot|Die Lampe ist rot.
+gelb|Die Wand ist gelb.
+hellrot|Die Küche hat eine hellrote Tür.
+dunkelbraun|Der Schrank ist dunkelbraun.
+mal|Das Zimmer ist drei mal vier Meter gross.
+nett|Die Nachbarin ist nett.
+vermieten|Wir vermieten eine kleine Wohnung.
+circa|Die Wohnung ist circa 60 Quadratmeter gross.
+privat|Das Zimmer ist von privat.
+ab|Die Wohnung ist ab Mai frei.
+sofort|Das Zimmer ist sofort frei.
+maximal|Die Miete kostet maximal 900 Franken.
+möbliert|Die Wohnung ist möbliert.
+bezahlen|Ich bezahle die Miete.
+verkaufen|Wir verkaufen das Sofa.
+etwas|Möchten Sie noch etwas?
+heute|Heute kommt der Vermieter.
+welche|Welche Farbe hat die Wand?
+also|Also, ich nehme das Zimmer.
+ungefähr|Das Sofa ist ungefähr zwei Meter lang.
+lang|Das Bett ist zwei Meter lang.
+hoch|Wie hoch ist der Schrank?
+morgen|Morgen besichtigen wir die Wohnung.
+aufstehen|Ich stehe um sieben Uhr auf.
+aufräumen|Ich räume mein Zimmer auf.
+anfangen|Der Kurs fängt um neun Uhr an.
+fernsehen|Abends sehe ich fern.
+schlafen|Am Sonntag schlafe ich lange.
+halb neun|Der Kurs beginnt um halb neun.
+geöffnet|Die Bibliothek ist bis acht Uhr geöffnet.
+frühstücken|Wir frühstücken um acht Uhr.
+einkaufen|Am Samstag kaufe ich ein.
+kochen|Heute koche ich eine Suppe.
+spazieren gehen|Wir gehen am Abend spazieren.
+gehen|Ich gehe zu Fuss zur Schule.
+oder|Möchtest du Tee oder Kaffee?
+müde|Am Abend bin ich müde.
+anrufen|Ich rufe dich morgen an.
+früh|Am Montag stehe ich früh auf.
+mit|Ich frühstücke mit meiner Familie.
+essen|Wir essen um zwölf Uhr.
+spät|Heute komme ich spät nach Hause.
+schon|Es ist schon neun Uhr.
+erst|Es ist erst sieben Uhr.
+vor|Es ist Viertel vor neun.
+nach|Es ist Viertel nach acht.
+halb|Es ist halb zwei.
+kurz|Es ist kurz vor zehn.
+gleich|Ich komme gleich.
+wann|Wann fängt der Kurs an?
+um|Der Kurs beginnt um acht Uhr.
+enden|Der Kurs endet um zwölf Uhr.
+von … bis …|Der Laden ist von acht bis sechs Uhr geöffnet.
+am|Am Montag arbeite ich.
+trinken|Ich trinke ein Glas Wasser.
+chatten|Ich chatte mit einer Freundin.
+glauben|Ich glaube, der Laden ist offen.
+geschlossen|Am Sonntag ist die Praxis geschlossen.
+öffnen|Die Bibliothek öffnet um neun Uhr.
+schliessen|Der Laden schliesst um sechs Uhr.
+jeder / jede / jedes|Ich lerne jeden Tag Deutsch.
+bringen|Ich bringe meine Tochter zur Schule.
+abholen|Ich hole meinen Sohn ab.
+mehr|Ich möchte mehr Wasser.
+zum Beispiel|Ich lese gern, zum Beispiel Krimis.
+wieder|Morgen sehen wir uns wieder.
+antworten|Bitte antworte auf meine Frage.
+total|Ich bin heute total müde.
+windig|Heute ist es windig.
+treffen|Ich treffe am Samstag eine Freundin.
+fahren|Wir fahren mit dem Velo.
+nehmen|Ich nehme einen Tee.
+doch|Du liest nicht gern? Doch, ich lese gern!
+wandern|Wir wandern in den Bergen.
+telefonieren|Ich telefoniere mit meiner Schwester.
+scheinen|Die Sonne scheint.
+regnen|Es regnet schon wieder.
+viel / viele|Hier gibt es viel Regen und viele Wolken.
+losgehen|Wir gehen um acht Uhr los.
+vergessen|Ich vergesse oft meinen Schlüssel.
+warm|Am Nachmittag ist es warm.
+kalt|Im Winter ist es kalt.
+schneien|Heute schneit es.
+bewölkt|Morgen ist es bewölkt.
+vor allem|Im Frühling regnet es vor allem im Westen.
+Ost-|Uznach liegt in der Ostschweiz.
+fallen|Am Abend fällt Schnee.
+bleiben|Es bleibt heute warm.
+stark|Der Wind ist stark.
+sonnig|Am Samstag ist es sonnig.
+steigen|Die Temperatur steigt auf zwanzig Grad.
+sinken|In der Nacht sinkt die Temperatur.
+plus|Heute sind es plus fünf Grad.
+minus|Morgen sind es minus drei Grad.
+heiss|Im Sommer ist es oft heiss.
+angenehm|Die Temperatur ist angenehm.
+sehen|Siehst du den See?
+lieber|Ich möchte lieber Tee.
+warum|Warum ist der Laden geschlossen?
+tanzen|Meine Schwester tanzt gern.
+schwimmen|Im Sommer schwimme ich im See.
+grillieren|Wir grillieren am Samstag.
+Lieblings-|Mein Lieblingsfilm ist sehr lustig.
+wichtig|Deutsch ist für mich wichtig.
+sammeln|Ich sammle Briefmarken.
+fotografieren|Ich fotografiere gern die Berge.
+dumm|Das war ein dummer Fehler.
+oft|Wir gehen oft ins Kino.
+leider|Ich habe leider keine Zeit.
+immer|Ich bin immer pünktlich.
+dabei|Hast du dein Handy dabei?
+vielleicht|Vielleicht regnet es morgen.
+einfach|Die Übung ist einfach.
+schnell|Der Zug fährt schnell.
+können|Ich kann heute nicht kommen.
+wollen|Wir wollen morgen schwimmen gehen.
+krank|Meine Tochter ist krank.
+pünktlich|Der Zug ist pünktlich.
+gestern|Gestern habe ich Deutsch gelernt.
+Gute Besserung!|Du bist krank? Gute Besserung!
+wecken|Ich wecke meinen Sohn um sieben Uhr.
+fertig sein|Bist du fertig?
+Was ist los?|Was ist los? Du siehst müde aus.
+auf keinen Fall|Ich will auf keinen Fall zu spät kommen.
+auf jeden Fall|Ich komme auf jeden Fall mit.
+nach Hause|Ich gehe jetzt nach Hause.
+backen|Wir backen zusammen einen Kuchen.
+singen|Wir singen ein Lied.
+reiten|Sie reitet am Samstag.
+malen|Das Kind malt ein Bild.
+Tennis spielen|Mein Sohn spielt gern Tennis.
+endlich|Endlich ist der Zug da!
+üben|Ich übe jeden Tag Deutsch.
+schade|Du kannst nicht kommen? Schade!
+lieb|Liebe Eltern, am Freitag ist die Schule geschlossen.
+abfahren|Der Zug fährt um zehn Uhr ab.
+zurückkommen|Wir kommen morgen zurück.
+mitnehmen|Nimm bitte eine Flasche Wasser mit.
+mitkommen|Willst du ins Kino mitkommen?
+leidtun|Das tut mir leid.
+Gitarre spielen|Mein Bruder spielt Gitarre.
+Velo fahren|Ich fahre mit dem Velo zur Schule.
+Freunde treffen|Am Samstag treffe ich Freunde.
+Ski fahren|Im Winter fahren wir Ski.
+der / das / die|Der Tisch, das Bett und die Lampe sind neu.
+der Deutsche / die Deutsche|Er ist Deutscher. Sie ist Deutsche.
+die Eltern|Meine Eltern wohnen in Bern.
+die Geschwister|Ich habe zwei Geschwister.
+die Grosseltern|Wir besuchen unsere Grosseltern.
+die Möbel|Die Möbel sind neu.
+die Pommes frites|Die Pommes frites sind heiss.
+die Schweiz|Die Schweiz liegt in Europa.
+die Türkei|Die Türkei hat viele Küsten.
+der Herr|Guten Tag, Herr Keller!
+die Frau|Guten Morgen, Frau Meier!
+die Dame|Die Dame wartet vor der Tür.
+der Name|Mein Name ist Nina.
+der Vorname|Mein Vorname ist Mia.
+der Nachname|Mein Nachname ist Keller.
+die Sprache|Welche Sprache sprichst du?
+die Adresse|Wie ist Ihre Adresse?
+die Entschuldigung|Danke für die Entschuldigung.
+der Buchstabe|Der erste Buchstabe ist A.
+das Alphabet|Wir lernen das deutsche Alphabet.
+die Firma|Die Firma ist in Zürich.
+der Moment|Einen Moment, bitte!
+die Strasse|Die Strasse ist breit.
+die Postleitzahl|Wie lautet Ihre Postleitzahl?
+der Familienstand|Mein Familienstand ist ledig.
+die Zahl|Zwölf ist eine Zahl.
+das Alter|Tragen Sie bitte Ihr Alter ein.
+die Hauptstadt|Paris ist die Hauptstadt von Frankreich.
+der Norden|Im Norden ist es kalt.
+der Süden|Im Süden ist es warm.
+der Westen|Im Westen regnet es.
+der Osten|Im Osten scheint die Sonne.
+der Hunger|Ich habe Hunger.
+der Durst|Nach dem Sport habe ich Durst.
+die Butter|Die Butter ist im Kühlschrank.
+das Mehl|Für den Kuchen brauchen wir Mehl.
+der Zucker|Ich trinke Kaffee ohne Zucker.
+die Milch|Die Milch ist kalt.
+der Käse|Der Käse kommt aus der Schweiz.
+das Salz|Das Salz steht auf dem Tisch.
+der Reis|Wir essen Reis mit Gemüse.
+das Gemüse|Ich kaufe frisches Gemüse.
+der Rahm|Ich nehme etwas Rahm für die Suppe.
+das Wasser|Ich trinke ein Glas Wasser.
+der Preis|Der Preis steht auf dem Schild.
+der Franken|Das Brot kostet einen Franken.
+die Miete|Die Miete ist zu hoch.
+der Stock|Wir wohnen im dritten Stock.
+der Quadratmeter|Ein Quadratmeter reicht dafür nicht.
+der Zentimeter|Der Tisch ist 70 Zentimeter hoch.
+der Meter|Das Bett ist zwei Meter lang.
+die Zeit|Heute habe ich keine Zeit.
+der Mittag|Am Mittag esse ich eine Suppe.
+der Vormittag|Am Vormittag arbeite ich.
+der Nachmittag|Am Nachmittag hole ich die Kinder ab.
+der Morgen|Am Morgen frühstücke ich.
+der Abend|Am Abend sehe ich fern.
+die Nacht|In der Nacht ist es hier ruhig.
+die Woche|Nächste Woche beginnt der Kurs.
+der Tag|Ich lerne jeden Tag.
+die Temperatur|Die Temperatur sinkt am Abend.
+das Grad|Heute sind es acht Grad.
+der Spass|Das Spiel macht Spass.
+die Freizeit|In meiner Freizeit lese ich gern.
+die Mathematik|Mathematik macht mir Spass.
+der Unterricht|Der Unterricht beginnt um acht Uhr.
+das Znüni|Ich nehme einen Apfel als Znüni mit.
+die Kommunikation|Gute Kommunikation ist in der Schule wichtig.
+der Kilometer|Die Schule ist einen Kilometer entfernt.
+der Ski|Ich fahre im Winter gern Ski.
+die Prüfung|Morgen habe ich eine Prüfung.
+das Diktat|Wir schreiben heute ein Diktat.
+der Bruder|Mein Bruder spielt Fussball.
+die Schwester|Meine Schwester lernt Deutsch.
+der Sohn|Mein Sohn geht in die Schule.
+die Tochter|Meine Tochter ist zwölf Jahre alt.
+die Familie|Meine Familie wohnt in Uznach.
+das Kind|Das Kind spielt im Garten.
+die Telefonnummer|Wie ist Ihre Telefonnummer?
+der Geburtsort|Bern ist mein Geburtsort.
+der Wohnort|Uznach ist mein Wohnort.
+das Formular|Bitte füllen Sie das Formular aus.
+das Ei|Ich brauche ein Ei für den Kuchen.
+der Apfel|Ich esse einen Apfel.
+die Tomate|Die Tomate ist rot.
+die Dose|Ich brauche eine Dose Tomaten.
+das Gramm|Ich möchte hundert Gramm Käse.
+das Kilogramm|Ein Kilogramm Äpfel kostet drei Franken.
+das Pfund|Ein Pfund sind 500 Gramm.
+der Liter|Wir brauchen einen Liter Milch.
+der Rappen|Das Brötchen kostet fünfzig Rappen.
+die Aktion|Die Aktion dauert bis Samstag.
+das Joghurt|Zum Frühstück esse ich ein Joghurt.
+die Bäckerei|Die Bäckerei öffnet um sieben Uhr.
+die Wohnung|Die Wohnung hat drei Zimmer.
+das Zimmer|Mein Zimmer ist hell.
+die Küche|Die Küche ist neben dem Bad.
+das Bad|Das Bad ist klein.
+der Tisch|Das Buch liegt auf dem Tisch.
+das Sofa|Das Sofa steht am Fenster.
+die Lampe|Die Lampe steht auf dem Tisch.
+das Badezimmer|Das Badezimmer hat eine Dusche.
+der Balkon|Die Wohnung hat einen Balkon.
+das Inserat|Ich habe das Inserat heute gelesen.
+der Anruf|Vielen Dank für den Anruf.
+der Monat|Die Miete kostet 900 Franken im Monat.
+die Bibliothek|Die Bibliothek ist am Samstag geöffnet.
+die Arbeit|Nach der Arbeit kaufe ich ein.
+der Termin|Ich habe um zehn Uhr einen Termin.
+das Wochenende|Am Wochenende schlafe ich lange.
+der Regen|Der Regen hört am Abend auf.
+das Wetter|Wie ist das Wetter heute?
+der Sommer|Im Sommer schwimmen wir im See.
+der Frühling|Im Frühling wird es wärmer.
+der Herbst|Im Herbst regnet es oft.
+der Winter|Im Winter fahren wir Ski.
+der Wind|Heute weht ein starker Wind.
+der Schnee|Im Frühling schmilzt der Schnee.
+das Hobby|Mein Hobby ist Fotografieren.
+die Speisekarte|Kann ich bitte die Speisekarte haben?
+das Velo|Ich fahre mit dem Velo zur Schule.
+die Glace|Ich möchte eine Glace, bitte.
+die Schule|Die Schule beginnt um acht Uhr.
+die Schülerin|Die Schülerin schreibt einen Brief.
+das Billett|Ich kaufe ein Billett für den Zug.
+die Schulreise|Morgen macht die Klasse eine Schulreise.
+der Ausflug|Am Sonntag machen wir einen Ausflug.
+`.trim().split("\n").map(line => line.split("|")));
+
+const countries = new Set("Deutschland Österreich Polen Spanien Ungarn Rumänien Syrien Frankreich Italien Griechenland".split(" "));
+const languages = new Set("Deutsch Polnisch Türkisch Spanisch Ungarisch Rumänisch Arabisch Französisch Italienisch Griechisch".split(" "));
+
+function cardExample(word, lessonId) {
+  if (word === "alt" && lessonId === 4) return "Der Schrank ist alt.";
+  if (word === "finden" && lessonId === 4) return "Ich finde das Zimmer schön.";
+  if (wordExamples.has(word)) return wordExamples.get(word);
+  if (countries.has(word)) return `Meine Freundin kommt aus ${word}.`;
+  if (languages.has(word)) return `Wir sprechen ${word}.`;
+  const accusative = word.replace(/^der /, "den ");
+  if (lessonId === 3) return `Ich suche ${accusative} im Laden.`;
+  if (lessonId === 4) return `Das Inserat zeigt ${accusative}.`;
+  if (lessonId === 5 && /^der (Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)$/.test(word)) {
+    return `Am ${word.slice(4)} habe ich Zeit.`;
+  }
+  return `${word[0].toUpperCase() + word.slice(1)} ist hier.`;
+}
