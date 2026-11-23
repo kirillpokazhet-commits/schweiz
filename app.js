@@ -245,11 +245,12 @@ function readRoute() {
       openSceneStep("start");
     } else {
       show("Маршрут", "Выбери, где хочешь поговорить по-немецки.", `
-        <ol class="scene-list">${uznachScenes.map(scene => `
+        <ol class="scene-list" role="list">${uznachScenes.map((scene, index) => `
           <li><a href="#uznach/${scene.id}">
+            <span class="number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
             <div><strong>${scene.title}</strong><p>${scene.goal}</p>
             ${saved.scenes[scene.id] ? "<small>Пройдено</small>" : ""}</div>
-            <span class="row-marker" aria-hidden="true"></span>
+            <span class="menu-arrow" aria-hidden="true"></span>
           </a></li>`).join("")}</ol>`);
     }
     return;
