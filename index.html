@@ -7,23 +7,22 @@
 <script defer src="./course.js"></script>
 <script defer src="./app.js"></script>
 <body>
-  <div class="layout">
-    <aside>
-      <a class="brand" href="#1"><span class="logo" aria-hidden="true">D</span> Deutsch <small>A1.1</small></a>
+  <main class="layout">
+    <header id="hero"></header>
+    <div id="overview">
       <nav id="lessons" aria-label="Лекции"></nav>
       <div class="overall">
         <div class="spread"><strong>Прогресс курса</strong><span id="percent"></span></div>
         <progress id="progress" max="21" value="0" aria-label="Прогресс курса"></progress>
         <small id="completed"></small>
       </div>
-    </aside>
-    <main>
-      <header class="hero" id="hero"></header>
+    </div>
+    <div id="lesson-view" hidden>
       <nav class="tabs" id="sections" aria-label="Разделы лекции"></nav>
       <section id="content" aria-labelledby="section-title"></section>
       <p id="audio-status" role="status"></p>
-      <p id="storage-message" role="status"></p>
-    </main>
-  </div>
+    </div>
+    <p id="storage-message" role="status"></p>
+  </main>
 </body>
 </html>

@@ -4,6 +4,15 @@ const course = [
     id: 1, title: "Знакомство", german: "Grüezi!",
     summary: "Представься, скажи, откуда ты и где живёшь.",
     theory: [
+      ["heissen и sein", "Чтобы назвать имя, скажи Ich heisse Ivan. Чтобы описать состояние, скажи Ich bin müde.", "Ich bin müde.", [
+        ["Pronomen", "heissen", "sein"],
+        ["ich", "heisse", "bin"],
+        ["du", "heisst", "bist"],
+        ["er / sie / es", "heisst", "ist"],
+        ["wir", "heissen", "sind"],
+        ["ihr", "heisst", "seid"],
+        ["sie / Sie", "heissen", "sind"]
+      ], "Универсальная фраза для понедельника."],
       ["Глагол обычно на втором месте", "Во фразе Ich wohne in Uznach первым идёт ich, вторым — wohne. Если начать с места, получится In Uznach wohne ich. У глагола своё кресло у окна.", "Ich wohne in Uznach."],
       ["Окончания для ich, du и Sie", "У wohnen формы ich wohne, du wohnst и Sie wohnen. Вежливое Sie пишется с большой буквы. У sein формы особые: ich bin, du bist, Sie sind.", "Wo wohnen Sie?"]
     ],
@@ -71,6 +80,58 @@ const course = [
     practice: [["Я люблю плавать.", "Ich schwimme gern", "Добавь gern после schwimme."], ["Ты можешь прийти завтра?", "Kannst du morgen kommen", "В вопросе без вопросительного слова kannst идёт первым."], ["Я умею плавать.", "Ich kann schwimmen", "После kann основной глагол остаётся в инфинитиве."]]
   }
 ];
+
+// Each group adds a choice, a gap, a word-order task and an error correction.
+const mixedPractice = [
+  [
+    ["Как вежливо спросить, где человек живёт?", "Wo wohnen Sie?", "С вежливым Sie используется wohnen.", "choice", ["Wo wohnst Sie?", "Wo wohnen Sie?", "Wo wohne Sie?"]],
+    ["Ich ___ Ivan. (Меня зовут Иван.)", "heisse", "Форма heissen для ich — heisse.", "gap"],
+    ["Собери фразу «Я живу в Уцнахе».", "Ich wohne in Uznach", "В обычном предложении глагол стоит на втором месте.", "order", ["Uznach", "wohne", "Ich", "in"]],
+    ["Исправь ошибку: Du bin müde.", "Du bist müde", "С du у глагола sein форма bist.", "fix"]
+  ],
+  [
+    ["Как пишется 22?", "zweiundzwanzig", "Сначала zwei, затем und и zwanzig.", "choice", ["zwanzigundzwei", "zweizwanzig", "zweiundzwanzig"]],
+    ["___ Adresse ist hier. (Мой адрес здесь.)", "Meine", "Adresse женского рода: meine Adresse.", "gap"],
+    ["Собери вопрос «Какой у тебя номер телефона?»", "Wie ist deine Telefonnummer", "После Wie идёт глагол ist.", "order", ["deine", "Wie", "Telefonnummer", "ist"]],
+    ["Исправь ошибку: Mein Nummer ist elf.", "Meine Nummer ist elf", "Nummer женского рода.", "fix"]
+  ],
+  [
+    ["Как сказать «У меня есть ребёнок»?", "Ich habe ein Kind.", "У Kind средний род: ein Kind.", "choice", ["Ich habe ein Kind.", "Ich habe einen Kind.", "Ich habe eine Kind."]],
+    ["Ich habe ___ Bruder. (Вставь неопределённый артикль.)", "einen", "После habe у мужского рода используется einen.", "gap"],
+    ["Собери фразу «Это моя сестра».", "Das ist meine Schwester", "Schwester женского рода: meine.", "order", ["meine", "Schwester", "Das", "ist"]],
+    ["Исправь ошибку: Das ist eine Kind.", "Das ist ein Kind", "Kind среднего рода, поэтому ein.", "fix"]
+  ],
+  [
+    ["Как вежливо заказать кофе?", "Ich möchte einen Kaffee.", "После möchte употребляем einen Kaffee.", "choice", ["Ich möchte eine Kaffee.", "Ich möchte einen Kaffee.", "Ich möchte ein Kaffee."]],
+    ["Ich habe ___ Brot. (У меня нет хлеба.)", "kein", "Brot среднего рода: kein Brot.", "gap"],
+    ["Собери вопрос «Сколько стоит суп?»", "Wie viel kostet die Suppe", "Wie viel открывает вопрос, затем идёт kostet.", "order", ["die", "viel", "Suppe", "Wie", "kostet"]],
+    ["Исправь ошибку: Ich möchte einen Suppe.", "Ich möchte eine Suppe", "Suppe женского рода, поэтому eine.", "fix"]
+  ],
+  [
+    ["Как сказать «в семь часов»?", "um sieben Uhr", "С точным временем используется um.", "choice", ["am sieben Uhr", "in sieben Uhr", "um sieben Uhr"]],
+    ["Ich arbeite ___ Montag. (Я работаю в понедельник.)", "am", "С днями недели употребляется am.", "gap"],
+    ["Собери фразу «В семь часов я встаю». Начни со времени.", "Um sieben Uhr stehe ich auf", "После Um sieben Uhr идёт stehe, в конце — auf.", "order", ["auf", "sieben", "ich", "Um", "stehe", "Uhr"]],
+    ["Исправь ошибку: Der Kurs beginnt am neun Uhr.", "Der Kurs beginnt um neun Uhr", "Время начала выражается через um.", "fix"]
+  ],
+  [
+    ["Как сказать «на почту» после ich gehe?", "zur Post", "Для женского рода zu der сокращается до zur.", "choice", ["zum Post", "zur Post", "zu dem Post"]],
+    ["Ich gehe ___ Bahnhof. (Я иду к вокзалу.)", "zum", "Zu dem сокращается до zum.", "gap"],
+    ["Собери вопрос «Где вокзал?»", "Wo ist der Bahnhof", "После Wo идёт ist.", "order", ["Bahnhof", "der", "Wo", "ist"]],
+    ["Исправь ошибку: Ich gehe zur Bahnhof.", "Ich gehe zum Bahnhof", "Bahnhof мужского рода: zum.", "fix"]
+  ],
+  [
+    ["Как сказать «Я умею плавать»?", "Ich kann schwimmen.", "С ich используется kann, а schwimmen остаётся в инфинитиве.", "choice", ["Ich kannst schwimmen.", "Ich kann schwimme.", "Ich kann schwimmen."]],
+    ["Ich schwimme ___. (Я люблю плавать.)", "gern", "Gern показывает, что действие тебе нравится.", "gap"],
+    ["Собери вопрос «Ты можешь прийти завтра?»", "Kannst du morgen kommen", "Kannst стоит первым, kommen — в конце.", "order", ["morgen", "Kannst", "kommen", "du"]],
+    ["Исправь ошибку: Ich kannst Fussball spielen.", "Ich kann Fussball spielen", "С ich используется kann.", "fix"]
+  ]
+];
+
+course.forEach((lesson, index) => {
+  lesson.practice = mixedPractice[index].flatMap((question, position) => (
+    position < lesson.practice.length ? [question, lesson.practice[position]] : [question]
+  ));
+});
 
 const finalTest = [
   ["Я из Германии. (используй kommen)", "Ich komme aus Deutschland", "Чтобы назвать страну, используй kommen aus. После ich получается komme."],
