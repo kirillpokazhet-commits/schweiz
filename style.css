@@ -58,6 +58,8 @@ h1 { font-size: 2rem; letter-spacing: -.035em; line-height: 1.15; }
 .audio { margin: 4px 0 4px 8px; padding: 4px 9px; color: var(--accent); font-size: .875rem; }
 .flashcard .audio { margin-left: 0; }
 .actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 15px; }
+[hidden] { display: none !important; }
+#backup-status:not(:empty) { margin-top: 10px; }
 .ratings { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; width: 100%; }
 .ratings button { width: 100%; padding: 7px 3px; font-size: .875rem; }
 .ratings small { display: block; margin-top: 2px; font-weight: 400; }

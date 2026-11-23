@@ -15,7 +15,19 @@
         <div class="spread"><strong>Прогресс курса</strong><span id="percent"></span></div>
         <progress id="progress" max="21" value="0" aria-label="Прогресс курса"></progress>
         <small id="completed"></small>
+        <div class="actions"><a class="button primary" href="#final/words">Повторить слова</a></div>
       </div>
+      <details class="panel">
+        <summary>Резервная копия прогресса</summary>
+        <p>Скачай копию, чтобы перенести прогресс в другой браузер или восстановить его позже.</p>
+        <div class="actions"><button type="button" id="export-progress">Скачать копию</button></div>
+        <label for="backup-file">Файл для восстановления</label>
+        <input type="file" id="backup-file" accept=".json,application/json">
+        <p id="backup-status" role="status"></p>
+        <div class="actions" id="backup-confirm" hidden>
+          <button type="button" class="primary" id="restore-progress">Заменить прогресс</button>
+        </div>
+      </details>
     </div>
     <div id="lesson-view" hidden>
       <nav class="tabs" id="sections" aria-label="Разделы лекции"></nav>

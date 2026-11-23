@@ -39,6 +39,94 @@ function persist() {
   renderNavigation();
 }
 
+const backupFormat = "deutsch-a11-progress";
+const backupFile = document.getElementById("backup-file");
+const backupStatus = document.getElementById("backup-status");
+const backupConfirm = document.getElementById("backup-confirm");
+let pendingBackup;
+
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function parseBackup(contents) {
+  const backup = JSON.parse(contents);
+  if (backup?.format !== backupFormat || backup.version !== 1 || backup.course !== storageKey) {
+    throw new Error("Несовместимый файл");
+  }
+  const progress = backup.progress;
+  if (!isRecord(progress?.theory) || !isRecord(progress.cards) || !isRecord(progress.practice)) {
+    throw new Error("Повреждённый прогресс");
+  }
+  const lessons = new Map(course.map(lesson => [String(lesson.id), lesson]));
+  const cardKeys = new Set(course.flatMap(wordsFor).map(card => card.key));
+  const isScore = (value, max) => Number.isInteger(value) && value >= 0 && value <= max;
+  if (
+    Object.entries(progress.theory).some(([id, read]) => !lessons.has(id) || typeof read !== "boolean") ||
+    Object.entries(progress.practice).some(([id, score]) => !isScore(score, lessons.get(id)?.practice.length)) ||
+    (progress.bestTest !== null && !isScore(progress.bestTest, finalTest.length))
+  ) throw new Error("Неверные результаты");
+  const cards = {};
+  for (const [key, card] of Object.entries(progress.cards)) {
+    if (!cardKeys.has(key) || !isRecord(card) ||
+      !Number.isSafeInteger(card.due) || card.due < 0 || typeof card.learned !== "boolean" ||
+      !(Number.isSafeInteger(card.interval) && card.interval > 0 || isScore(card.level, 5))
+    ) throw new Error("Неверное расписание");
+    cards[key] = { due: card.due, learned: card.learned };
+    if (Number.isSafeInteger(card.interval) && card.interval > 0) cards[key].interval = card.interval;
+    else cards[key].level = card.level;
+  }
+  return { theory: progress.theory, practice: progress.practice, cards, bestTest: progress.bestTest };
+}
+
+document.getElementById("export-progress").addEventListener("click", () => {
+  const exportedAt = new Date().toISOString();
+  const copy = { format: backupFormat, version: 1, course: storageKey, exportedAt, progress: saved };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(copy, null, 2)], { type: "application/json" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `deutsch-a11-progress-${exportedAt.slice(0, 10)}.json`;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+backupFile.addEventListener("change", async () => {
+  pendingBackup = null;
+  backupConfirm.hidden = true;
+  backupStatus.textContent = "";
+  const file = backupFile.files[0];
+  if (!file) return;
+  try {
+    if (file.size > 2_000_000) throw new Error("Файл слишком большой");
+    const progress = parseBackup(await file.text());
+    if (backupFile.files[0] !== file) return;
+    pendingBackup = progress;
+    backupConfirm.hidden = false;
+    backupStatus.textContent = `В копии есть данные по ${Object.keys(progress.cards).length} карточкам. Восстановление заменит прогресс в этом браузере.`;
+  } catch {
+    if (backupFile.files[0] !== file) return;
+    backupStatus.textContent = "Не удалось прочитать копию. Выбери файл JSON, скачанный из этого курса.";
+    backupFile.value = "";
+  }
+});
+
+document.getElementById("restore-progress").addEventListener("click", () => {
+  if (!pendingBackup) return;
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(pendingBackup));
+  } catch {
+    backupStatus.textContent = "Браузер не смог сохранить копию. Текущий прогресс остался прежним.";
+    return;
+  }
+  saved = pendingBackup;
+  pendingBackup = null;
+  backupFile.value = "";
+  backupConfirm.hidden = true;
+  elements["storage-message"].textContent = "";
+  backupStatus.textContent = "Прогресс восстановлен.";
+  renderNavigation();
+});
+
 function escapeHTML(value) {
   const span = document.createElement("span");
   span.textContent = value;
