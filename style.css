@@ -1,13 +1,14 @@
 :root {
   color-scheme: light;
   font-family: Arial, sans-serif;
-  background: #f2f2f0;
+  background: #fafafa;
   color: #141414;
   --paper: #fff;
   --ink: #141414;
   --muted: #5e5e5b;
-  --line: #d9d9d5;
-  --soft: #f4f4f2;
+  --line: #e9e9eb;
+  --soft: #f7f7f8;
+  --card-radius: 13px;
   --accent: #c52431;
   --accent-hover: #aa1825;
   --ease: cubic-bezier(.2, .7, .25, 1);
@@ -22,7 +23,7 @@ button { cursor: pointer; }
 h1, h2, h3, p, dl { margin: 0; }
 small { font-size: .875rem; color: var(--muted); }
 .layout { width: min(100%, 70rem); min-height: 100vh; margin-inline: auto; background: var(--paper); padding: 0 clamp(20px, 6vw, 88px) 52px; }
-.masthead { min-height: 70px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.masthead { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .wordmark { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 1rem; font-weight: 700; }
 .wordmark-level, .location { color: var(--muted); }
 .location { font-size: .875rem; }
@@ -41,7 +42,7 @@ h1 { font-size: clamp(2.5rem, 7vw, 4.75rem); letter-spacing: -.073em; line-heigh
 .home-link:hover { color: var(--accent); }
 #overview { display: grid; gap: 28px; }
 .lesson-list h2 { margin-bottom: 16px; font-size: 1.1rem; }
-.uznach-entry { display: grid; gap: 6px; margin-bottom: 24px; padding: 17px 18px; border-left: 3px solid var(--accent); background: var(--soft); transition: background-color 180ms var(--ease); }
+.uznach-entry { display: grid; gap: 6px; margin-bottom: 24px; padding: 17px 18px; border-radius: var(--card-radius); background: var(--soft); transition: background-color 180ms var(--ease); }
 .uznach-entry strong { font-size: 1.3rem; letter-spacing: -.025em; }
 .uznach-entry:hover { background: #fff0f0; }
 #sections[hidden] + #content { margin-top: 24px; }
@@ -55,25 +56,19 @@ h1 { font-size: clamp(2.5rem, 7vw, 4.75rem); letter-spacing: -.073em; line-heigh
 .scene-line strong { font-size: 1.1rem; }
 .error-rule { margin-top: 12px; padding: 12px 14px; border-left: 2px solid var(--accent); background: #fff4f4; }
 .error-rule details { margin-top: 8px; }
-#lessons { border-top: 1px solid var(--line); }
-.lesson { display: grid; grid-template-columns: 33px minmax(0, 1fr) 12px; align-items: center; gap: 12px; min-height: 77px; padding: 13px 5px; border-bottom: 1px solid var(--line); transition: background-color 180ms var(--ease), color 180ms var(--ease); }
+#lessons { display: grid; gap: 4px; }
+.lesson { display: grid; grid-template-columns: 33px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 60px; padding: 11px 8px; border-radius: 8px; transition: background-color 180ms var(--ease), color 180ms var(--ease); }
 .lesson:hover, .lesson:focus-visible { color: var(--accent); background: var(--soft); }
-.number { align-self: start; padding-top: 4px; font-size: .875rem; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.number { font-size: .875rem; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
 .lesson-info { min-width: 0; display: grid; gap: 5px; }
 .lesson-info strong { font-size: clamp(1.12rem, 3vw, 1.45rem); letter-spacing: -.025em; }
-.lesson-bar { height: 2px; max-width: 18rem; overflow: hidden; background: var(--line); }
-.lesson-bar span { display: block; height: 100%; background: var(--accent); }
+.lesson-percent { font-variant-numeric: tabular-nums; }
 .row-marker { width: 7px; height: 7px; background: var(--ink); border-radius: 100%; transition: scale 180ms var(--ease), background-color 180ms var(--ease); }
-.lesson:hover .row-marker { scale: 1.35; background: var(--accent); }
 .lesson-final { min-height: 78px; }
-.overall { align-self: start; padding: clamp(17px, 3vw, 25px); background: var(--soft); border-radius: 13px; }
+.overall { align-self: start; padding: clamp(17px, 3vw, 25px); background: var(--soft); border-radius: var(--card-radius); }
 .spread { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 #percent { font-weight: 700; font-variant-numeric: tabular-nums; }
-progress { display: block; width: 100%; height: 4px; border: 0; border-radius: 99px; margin: 12px 0 9px; appearance: none; overflow: hidden; background: var(--line); accent-color: var(--accent); }
-progress::-webkit-progress-bar { background: var(--line); }
-progress::-webkit-progress-value { background: var(--accent); transition: width 220ms var(--ease); }
-progress::-moz-progress-bar { background: var(--accent); }
-.study-next { display: grid; gap: 14px; margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--line); }
+.study-next { display: grid; gap: 14px; margin-top: 21px; }
 .study-next > div { display: flex; align-items: baseline; gap: 9px; }
 .study-next strong { font-size: 2.45rem; letter-spacing: -.07em; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
 .study-next span { color: var(--muted); }
@@ -135,9 +130,7 @@ input[type="file"] { max-width: 100%; padding: 8px; }
 .word-tray { min-height: 60px; align-items: center; padding: 7px; border: 1px dashed #aaa; border-radius: 8px; background: var(--soft); }
 .word-tray button, .word-bank button { padding: 5px 10px; }
 .word-bank button:disabled { opacity: .4; cursor: default; }
-.practice-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.practice-progress progress { flex: 1; min-width: 0; }
-.practice-progress small { flex: none; }
+.practice-progress { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-bottom: 12px; }
 .dictation-help { margin-top: 8px; color: var(--muted); }
 .dictation-help p { margin-top: 6px; }
 .feedback { margin-top: 14px; animation: appear 230ms var(--ease) both; }

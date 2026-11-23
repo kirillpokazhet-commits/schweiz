@@ -1,5 +1,5 @@
 const elements = Object.fromEntries(
-  ["overview", "lesson-view", "lessons", "progress", "percent", "completed", "due-count", "hero", "sections", "content", "storage-message", "audio-status"]
+  ["overview", "lesson-view", "lessons", "percent", "due-count", "hero", "sections", "content", "storage-message", "audio-status"]
     .map(id => [id, document.getElementById(id)])
 );
 const labels = { theory: "Теория", words: "Слова", practice: "Тренировка", grammar: "Грамматика", test: "Тест A1.1" };
@@ -183,10 +183,7 @@ function renderNavigation() {
   const max = course.length * 3;
   const words = course.flatMap(wordsFor);
   const due = words.filter(card => saved.cards[card.key]?.due <= Date.now()).length;
-  elements.progress.max = max;
-  elements.progress.value = count;
   elements.percent.textContent = `${Math.round(count / max * 100)}%`;
-  elements.completed.textContent = `${count} из ${max} разделов`;
   elements["due-count"].textContent = due;
   if (!view.home) return;
   const completedScenes = uznachScenes.filter(scene => saved.scenes[scene.id]).length;
@@ -199,16 +196,14 @@ function renderNavigation() {
     const value = Number(Boolean(saved.theory[lesson.id])) + learned + (score ?? 0);
     return `<a class="lesson" href="#${lesson.id}">
       <span class="number">${String(lesson.id).padStart(2, "0")}</span>
-      <span class="lesson-info"><strong>${lesson.title}</strong>
-        <span class="lesson-bar" aria-hidden="true"><span style="width:${value / max * 100}%"></span></span>
-        <small>Слова ${learned}/${lesson.words.length} · тренировка ${score ?? "—"}/${lesson.practice.length}</small>
-      </span><span class="row-marker" aria-hidden="true"></span>
+      <span class="lesson-info"><strong>${lesson.title}</strong></span>
+      <small class="lesson-percent">${Math.round(value / max * 100)}%</small>
     </a>`;
   }).join("") + `<a class="lesson lesson-final" href="#final">
       <span class="number" aria-hidden="true">✓</span>
       <span class="lesson-info"><strong>Итоги A1.1</strong>
         <small>${saved.bestTest === null ? "Тренировки, грамматика и тест" : `Лучший результат теста ${saved.bestTest}/${finalTest.length}`}</small>
-      </span><span class="row-marker" aria-hidden="true"></span>
+      </span>
     </a>`;
 }
 
@@ -489,7 +484,7 @@ function renderQuestion() {
     scene ? scene.goal : `Задание ${index + 1} из ${questions.length} · ${formats[type]}`, `
     ${scene ? sceneLine(scene, study.step.line) : ""}
     ${test || scene ? "" : `<div class="practice-progress">
-      <progress value="${study.answers.length}" max="${questions.length}" aria-label="Задания с ответом"></progress>
+      <small>Пройдено ${Math.round(study.answers.length / questions.length * 100)}%</small>
       <small aria-live="polite">Верных подряд: ${study.streak}</small>
     </div>`}
     <div class="panel">
