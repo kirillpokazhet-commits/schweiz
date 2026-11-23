@@ -34,6 +34,7 @@ h1, h2, h3, p { margin: 0; }
 h1 { font-size: 2rem; letter-spacing: -.035em; line-height: 1.15; }
 #hero p { color: var(--muted); line-height: 1.5; margin-top: 8px; }
 .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; margin: 18px 0; padding: 4px; border-radius: 13px; background: #d8dfeb; }
+.tabs:has(a:nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tabs a { padding: 12px 3px; text-align: center; border-radius: 10px; color: var(--muted); font-size: .95rem; }
 .tabs a[aria-current] { background: white; color: var(--ink); font-weight: 650; box-shadow: 0 1px 3px #14213c26; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -45,6 +46,8 @@ h1 { font-size: 2rem; letter-spacing: -.035em; line-height: 1.15; }
 .panel h3 + p { margin-top: 8px; }
 .example { margin-top: 14px; padding: 4px 12px; border-left: 3px solid #bb3a2e; color: var(--muted); }
 .grammar { width: 100%; border-collapse: collapse; margin-top: 14px; text-align: left; }
+.grammar-wrap { overflow-x: auto; }
+.theory-reference { color: var(--muted); font-size: .875rem; margin-bottom: 12px; }
 .grammar th, .grammar td { padding: 4px 8px 4px 0; }
 .grammar thead { border-bottom: 1px solid var(--line); }
 .grammar tbody th { color: var(--muted); font-weight: 500; }
@@ -55,6 +58,10 @@ h1 { font-size: 2rem; letter-spacing: -.035em; line-height: 1.15; }
 .audio { margin: 4px 0 4px 8px; padding: 4px 9px; color: var(--accent); font-size: .875rem; }
 .flashcard .audio { margin-left: 0; }
 .actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 15px; }
+.ratings { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; width: 100%; }
+.ratings button { width: 100%; padding: 7px 3px; font-size: .875rem; }
+.ratings small { display: block; margin-top: 2px; font-weight: 400; }
+.ratings .primary small { color: inherit; }
 .flashcard { text-align: center; min-height: 190px; display: grid; align-content: center; gap: 10px; margin-top: 12px; background: #f2f5fa; }
 .flashcard h3 { font-size: clamp(1.3rem, 3vw, 2rem); }
 details { margin-top: 18px; }
@@ -72,11 +79,18 @@ input { width: 100%; border: 1px solid #9bb0b5; border-radius: 8px; padding: 10p
 .word-tray { min-height: 52px; align-items: center; padding: 7px; border: 1px dashed var(--accent); border-radius: 9px; background: #f2f5fa; }
 .word-tray button, .word-bank button { padding: 5px 10px; }
 .word-bank button:disabled { opacity: .4; cursor: default; }
+.practice-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.practice-progress progress { flex: 1; min-width: 0; }
+.practice-progress small { flex: none; }
+.dictation-help { margin-top: 8px; color: var(--muted); }
+.dictation-help p { margin-top: 6px; }
 .feedback { margin-top: 14px; }
 .good { color: #076951; }
 .wrong { color: #9c3929; }
 #storage-message, #audio-status { color: #9c3929; margin-top: 14px; }
 @media (max-width: 380px) {
+  .tabs:has(a:nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ratings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lesson { padding: 12px; gap: 10px; }
   .tabs a { font-size: .875rem; }
 }

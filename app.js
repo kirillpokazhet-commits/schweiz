@@ -2,16 +2,30 @@ const elements = Object.fromEntries(
   ["overview", "lesson-view", "lessons", "progress", "percent", "completed", "hero", "sections", "content", "storage-message", "audio-status"]
     .map(id => [id, document.getElementById(id)])
 );
-const labels = { theory: "Теория", words: "Слова", practice: "Тренировка", test: "Тест A1.1" };
+const labels = { theory: "Теория", words: "Слова", practice: "Тренировка", grammar: "Грамматика", test: "Тест A1.1" };
 const day = 86_400_000;
-const storageKey = "deutsch-a11.v1";
+const minute = 60_000;
+const ratings = { again: "Снова", hard: "Трудно", good: "Хорошо", easy: "Легко" };
+const storageKey = "deutsch-a11.v2";
 let saved = { theory: {}, cards: {}, practice: {}, bestTest: null };
 let view;
 let study;
+let reviewTimer;
 
 try {
   const previous = localStorage.getItem(storageKey);
   if (previous) saved = { ...saved, ...JSON.parse(previous) };
+  else {
+    const oldProgress = JSON.parse(localStorage.getItem("deutsch-a11.v1") || "null");
+    if (oldProgress?.cards) {
+      for (const lesson of course) {
+        for (const card of wordsFor(lesson)) {
+          const oldCard = oldProgress.cards[card.legacyKey];
+          if (oldCard) saved.cards[card.key] = oldCard;
+        }
+      }
+    }
+  }
 } catch {
   elements["storage-message"].textContent = "Не удалось загрузить сохранённый прогресс.";
 }
@@ -61,8 +75,8 @@ function speak(button) {
 }
 
 function wordsFor(lesson) {
-  return lesson.words.map(([word, translation], index) => ({
-    key: `${lesson.id}:${index}`, word, translation
+  return lesson.words.map(([word, translation, legacyKey], index) => ({
+    key: `${lesson.id}:${index}`, word, translation, legacyKey
   }));
 }
 
@@ -97,17 +111,18 @@ function renderNavigation() {
   }).join("") + `<a class="lesson lesson-final" href="#final">
       <span class="number" aria-hidden="true">✓</span>
       <span class="lesson-info"><strong>Итоги A1.1</strong>
-        <small>${saved.bestTest === null ? "Слова, тренировки и итоговый тест" : `Лучший результат теста ${saved.bestTest}/${finalTest.length}`}</small>
+        <small>${saved.bestTest === null ? "Слова, тренировки, грамматика и тест" : `Лучший результат теста ${saved.bestTest}/${finalTest.length}`}</small>
       </span>
     </a>`;
 }
 
 function readRoute() {
+  clearTimeout(reviewTimer);
   const [id, section] = location.hash.slice(1).split("/");
   const lesson = course.find(item => String(item.id) === id);
   const final = id === "final";
   const home = !final && !lesson;
-  const tabs = final ? ["words", "practice", "test"] : ["theory", "words", "practice"];
+  const tabs = final ? ["words", "practice", "grammar", "test"] : ["theory", "words", "practice"];
   view = {
     id: final ? "final" : lesson ? String(lesson.id) : "home",
     section: tabs.includes(section) ? section : tabs[0],
@@ -129,6 +144,9 @@ function readRoute() {
   elements.sections.innerHTML = tabs.map(tab => `
     <a href="#${view.id}/${tab}" ${view.section === tab ? 'aria-current="page"' : ""}>${labels[tab]}</a>`).join("");
   if (view.section === "theory") renderTheory();
+  if (view.section === "grammar") {
+    show("Шпаргалка по грамматике", "Повтори перед тестом · Учебник, стр. 204–207", theoryCards(grammarReview));
+  }
   if (view.section === "words") openWords();
   if (view.section === "practice" || view.section === "test") openPractice();
 }
@@ -138,35 +156,72 @@ function show(title, subtitle, body) {
     <header class="section-head"><h2 id="section-title">${title}</h2><p>${subtitle}</p></header>${body}`;
 }
 
-function renderTheory() {
-  const { lesson } = view;
-  elements.content.innerHTML = `<h2 id="section-title" class="sr-only">Теория</h2>
-    <div class="stack">${lesson.theory.map(([title, description, example, table, note]) => `
+function theoryCards(items) {
+  return `<div class="stack">${items.map(([title, description, example, table, note]) => `
       <article class="panel"><h3>${title}</h3><p>${description}</p>
-      ${table ? `<table class="grammar" lang="de-CH">
+      ${table ? `<div class="grammar-wrap"><table class="grammar">
         <thead><tr>${table[0].map(cell => `<th scope="col">${cell}</th>`).join("")}</tr></thead>
         <tbody>${table.slice(1).map(([pronoun, ...forms]) => `
           <tr><th scope="row">${pronoun}</th>${forms.map(form => `<td>${form}</td>`).join("")}</tr>
         `).join("")}</tbody>
-      </table>` : ""}
-      <div class="example"><span lang="de-CH">${example}</span>${audioButton()}${note ? `<p>${note}</p>` : ""}</div></article>`).join("")}</div>
+      </table></div>` : ""}
+      <div class="example"><span lang="de-CH">${example}</span>${audioButton()}${note ? `<p>${note}</p>` : ""}</div></article>`).join("")}</div>`;
+}
+
+function renderTheory() {
+  const { lesson } = view;
+  elements.content.innerHTML = `<h2 id="section-title" class="sr-only">Теория</h2>
+    <p class="theory-reference"><span lang="de-CH">${lesson.german}</span> · Учебник, стр. ${lesson.pages}</p>
+    ${theoryCards(lesson.theory)}
     <div class="actions">
       <button class="primary" data-action="read">${saved.theory[lesson.id] ? "Прочитано ✓" : "Отметить прочитанным"}</button>
       <a class="button" href="#${view.id}/words">К словам</a>
     </div>`;
 }
 
-function openWords(all = false) {
+function openWords(freeReview = false) {
+  clearTimeout(reviewTimer);
   const cards = (view.final ? course : [view.lesson]).flatMap(wordsFor);
   const now = Date.now();
-  const due = cards.filter(card => saved.cards[card.key]?.due <= now);
+  const due = cards.filter(card => saved.cards[card.key]?.due <= now)
+    .sort((first, second) => saved.cards[first.key].due - saved.cards[second.key].due);
   const fresh = cards.filter(card => !saved.cards[card.key]);
-  study = { cards, queue: all ? [...cards] : [...due, ...fresh], reviewed: 0, revealed: false };
+  study = {
+    cards, queue: freeReview ? [...cards] : [...due, ...fresh.slice(0, 12)],
+    reviewed: 0, revealed: false, freeReview
+  };
   renderWords();
 }
 
+function reviewDelays(card) {
+  const previous = saved.cards[card.key];
+  const days = (previous?.interval ?? ([0, 1, 3, 7, 14, 30][previous?.level] || 0) * day) / day;
+  if (days < 1) return { again: minute, hard: 10 * minute, good: day, easy: 4 * day };
+  return {
+    again: minute,
+    hard: Math.ceil(days * 1.2) * day,
+    good: Math.max(Math.ceil(days * 1.2) + 1, Math.round(days * 2)) * day,
+    easy: Math.max(Math.ceil(days * 1.2) + 2, Math.round(days * 3)) * day
+  };
+}
+
+const relativeTime = new Intl.RelativeTimeFormat("ru", { style: "short" });
+
+function formatReviewDelay(delay) {
+  const [unit, size] = delay >= day ? ["day", day] : delay >= 60 * minute ? ["hour", 60 * minute] : ["minute", minute];
+  return relativeTime.format(Math.max(1, Math.ceil(delay / size)), unit);
+}
+
 function renderWords() {
+  clearTimeout(reviewTimer);
   const card = study.queue[0];
+  const now = Date.now();
+  const newCount = study.cards.filter(item => !saved.cards[item.key]).length;
+  const nextDue = Math.min(...study.cards.map(item => saved.cards[item.key]?.due ?? Infinity));
+  if (!card && !study.freeReview && Number.isFinite(nextDue)) {
+    reviewTimer = setTimeout(() => openWords(), Math.min(Math.max(nextDue - now, 0), 2_147_483_647));
+  }
+  const delays = card && reviewDelays(card);
   const list = study.cards.map(item => `
     <dt><span lang="de-CH">${item.word}</span>${audioButton()}</dt><dd>${item.translation}</dd>`).join("");
   const panel = card ? `
@@ -176,27 +231,36 @@ function renderWords() {
         <div><h3 lang="de-CH">${card.word}</h3>${audioButton()}</div>
         <p aria-live="polite">${study.revealed ? card.translation : "Вспомни перевод"}</p>
       </div>
-      <div class="actions">${study.revealed ? `
-        <button data-action="forgot">Забыл</button><button class="primary" data-action="remembered">Помню</button>`
+      <div class="actions">${study.revealed ? study.freeReview
+        ? '<button class="primary" data-action="next-card">Следующая карточка</button>'
+        : `<div class="ratings">${Object.entries(ratings).map(([rating, label]) => `
+          <button ${rating === "good" ? 'class="primary"' : ""} data-action="rate-card" data-rating="${rating}">
+            <strong>${label}</strong><small>${formatReviewDelay(delays[rating])}</small>
+          </button>`).join("")}</div>`
         : '<button class="primary" data-action="reveal">Показать перевод</button>'}</div>
     </div>` : `
-    <div class="panel"><h3>На сегодня всё</h3>
-    <p>${study.reviewed ? `Карточек с ответом «Помню» за подход: ${study.reviewed}.` : "Новые и запланированные карточки появятся здесь."}</p>
-    <div class="actions"><button data-action="all-words">Повторить все слова</button></div></div>`;
-  show(view.final ? "Слова всех лекций" : "Слова", `Карточки · ${study.cards.length} слов и выражений`,
+    <div class="panel"><h3>${study.freeReview ? "Свободное повторение завершено" : newCount ? "Подход завершён" : "Сейчас очередь пуста"}</h3>
+    ${study.reviewed ? `<p>Оценок за подход: ${study.reviewed}.</p>` : ""}
+    ${!study.freeReview && newCount ? `<p>Новых карточек осталось: ${newCount}.</p>` : ""}
+    ${Number.isFinite(nextDue) ? `<p>По расписанию: ${nextDue <= now ? "есть карточки к повторению" : formatReviewDelay(nextDue - now)}.</p>` : ""}
+    <div class="actions">
+      ${!study.freeReview && newCount ? '<button class="primary" data-action="scheduled-words">Следующая порция</button>' : ""}
+      <button data-action="${study.freeReview ? "scheduled-words" : "all-words"}">${study.freeReview ? "К расписанию" : "Повторить все вне расписания"}</button>
+    </div></div>`;
+  show(view.final ? "Слова всех лекций" : "Слова", `${study.freeReview ? "Свободное повторение" : "Интервальное повторение"} · ${study.cards.length} слов и выражений`,
     `${panel}<details class="panel"><summary>Список слов</summary><dl>${list}</dl></details>`);
 }
 
-function gradeCard(remembered) {
+function gradeCard(rating) {
   const card = study.queue.shift();
-  const previous = saved.cards[card.key]?.level || 0;
-  const level = remembered ? Math.min(previous + 1, 5) : 0;
-  const delay = remembered ? [0, 1, 3, 7, 14, 30][level] * day : 0;
+  const interval = reviewDelays(card)[rating];
   saved.cards[card.key] = {
-    level, due: Date.now() + delay, learned: remembered || Boolean(saved.cards[card.key]?.learned)
+    interval, due: Date.now() + interval, learned: rating !== "again" || Boolean(saved.cards[card.key]?.learned)
   };
-  if (remembered) study.reviewed++;
-  else study.queue.push(card);
+  study.reviewed++;
+  const pending = new Set(study.queue.map(item => item.key));
+  const ready = study.cards.filter(item => !pending.has(item.key) && saved.cards[item.key]?.due <= Date.now());
+  study.queue.push(...ready);
   study.revealed = false;
   persist();
   renderWords();
@@ -205,7 +269,7 @@ function gradeCard(remembered) {
 function openPractice() {
   const test = view.section === "test";
   const questions = test ? finalTest : (view.final ? course : [view.lesson]).flatMap(lesson => lesson.practice);
-  study = { test, questions, answers: [], index: 0, feedback: null, order: [] };
+  study = { test, questions, answers: [], index: 0, feedback: null, order: [], streak: 0, bestStreak: 0 };
   if (view.final && !test) {
     show("Тренировки всех лекций", "Выбери тему или реши все задания подряд.", `
       <div class="panel stack">${course.map(lesson => `
@@ -223,10 +287,15 @@ function openPractice() {
 function renderQuestion() {
   const { test, questions, index, feedback } = study;
   const [prompt, answer, explanation, type = "translate", options] = questions[index];
-  const formats = { translate: "Перевод", choice: "Выбор ответа", gap: "Пропуск", order: "Порядок слов", fix: "Исправление ошибки" };
+  const formats = { translate: "Перевод", choice: "Выбор ответа", gap: "Пропуск", order: "Порядок слов", fix: "Исправление ошибки", listen: "Диктант" };
   const submit = `<div class="actions"><button class="primary" type="submit">${test ? "Далее" : "Проверить"}</button></div>`;
   let fields = `<label for="answer">${type === "gap" ? "Пропущенное слово" : "Ответ по-немецки"}</label>
     <input id="answer" name="answer" lang="de-CH" required autocomplete="off" autocapitalize="off" spellcheck="false">`;
+  if (type === "listen") {
+    fields = `<div class="actions"><span hidden lang="de-CH">${answer}</span>${audioButton()}</div>
+      <details class="dictation-help"><summary>Показать текст, если звук недоступен</summary>
+        <p lang="de-CH">${answer}</p></details>${fields}`;
+  }
   if (type === "choice") {
     fields = `<div class="choices">${options.map((option, position) => `
       <label class="choice"><input type="radio" name="answer" value="${position}" required>
@@ -241,7 +310,12 @@ function renderQuestion() {
         <button type="button" lang="de-CH" data-action="add-word" data-position="${position}"
           ${study.order.includes(position) ? "disabled" : ""}>${option}</button>`).join("")}</div>`;
   }
-  show(test ? "Тест A1.1" : "Тренировка", `Задание ${index + 1} из ${questions.length} · ${formats[type]}`, `
+  show(test ? "Тест A1.1" : study.review ? "Работа над ошибками" : "Тренировка",
+    `Задание ${index + 1} из ${questions.length} · ${formats[type]}`, `
+    ${test ? "" : `<div class="practice-progress">
+      <progress value="${study.answers.length}" max="${questions.length}" aria-label="Задания с ответом"></progress>
+      <small aria-live="polite">Верных подряд: ${study.streak}</small>
+    </div>`}
     <div class="panel">
       <h3>${prompt}</h3>
       ${feedback ? `
@@ -271,7 +345,7 @@ function advance() {
   }
   const score = study.answers.filter(result => result.correct).length;
   if (study.test) saved.bestTest = Math.max(saved.bestTest ?? 0, score);
-  else if (view.final) {
+  else if (!study.review && view.final) {
     let offset = 0;
     for (const lesson of course) {
       const end = offset + lesson.practice.length;
@@ -279,7 +353,7 @@ function advance() {
       saved.practice[lesson.id] = Math.max(saved.practice[lesson.id] ?? 0, correct);
       offset = end;
     }
-  } else {
+  } else if (!study.review) {
     saved.practice[view.lesson.id] = Math.max(saved.practice[view.lesson.id] ?? 0, score);
   }
   persist();
@@ -290,9 +364,13 @@ function advance() {
       <p>Твой ответ: <span lang="de-CH">${escapeHTML(result.value)}</span></p>
       <p>Вариант ответа: <strong lang="de-CH">${answer}</strong>${audioButton()}</p><p>${explanation}</p></article>`;
   }).join("");
-  show("Результат", `Верных ответов: ${score} из ${study.questions.length}`, `
+  const streak = study.test ? "" : ` · Лучшая серия: ${study.bestStreak}`;
+  show("Результат", `Верных ответов: ${score} из ${study.questions.length}${streak}`, `
     <div class="stack">${mistakes || '<p class="panel good">Все ответы верны.</p>'}</div>
-    <div class="actions"><button class="primary" data-action="retry">Пройти ещё раз</button></div>`);
+    <div class="actions">
+      ${mistakes && !study.test ? '<button class="primary" data-action="retry-mistakes">Повторить ошибки</button>' : ""}
+      <button data-action="retry">Пройти ещё раз</button>
+    </div>`);
   elements.content.querySelector("button").focus();
 }
 
@@ -320,6 +398,8 @@ elements.content.addEventListener("submit", event => {
   study.answers.push(result);
   if (study.test) advance();
   else {
+    study.streak = result.correct ? study.streak + 1 : 0;
+    study.bestStreak = Math.max(study.bestStreak, study.streak);
     study.feedback = result;
     renderQuestion();
     elements.content.querySelector("button").focus();
@@ -350,13 +430,30 @@ elements.content.addEventListener("click", event => {
       persist();
       button.textContent = "Прочитано ✓";
       break;
-    case "all-words": openWords(true); elements.content.querySelector("button").focus(); break;
-    case "reveal": study.revealed = true; renderWords(); elements.content.querySelector("button").focus(); break;
-    case "remembered": gradeCard(true); elements.content.querySelector("button").focus(); break;
-    case "forgot": gradeCard(false); elements.content.querySelector("button").focus(); break;
+    case "all-words": openWords(true); elements.content.querySelector('[data-action="reveal"]').focus(); break;
+    case "scheduled-words": openWords(); elements.content.querySelector("[data-action='reveal'], [data-action='all-words']").focus(); break;
+    case "reveal":
+      study.revealed = true;
+      renderWords();
+      elements.content.querySelector(".ratings .primary, [data-action='next-card']").focus();
+      break;
+    case "rate-card": gradeCard(button.dataset.rating); elements.content.querySelector("[data-action='reveal'], [data-action='scheduled-words'], [data-action='all-words']").focus(); break;
+    case "next-card":
+      study.queue.shift();
+      study.revealed = false;
+      renderWords();
+      elements.content.querySelector("[data-action='reveal'], [data-action='scheduled-words']").focus();
+      break;
     case "start": renderQuestion(); elements.content.querySelector("form input, form button").focus(); break;
     case "next": advance(); break;
     case "retry": openPractice(); break;
+    case "retry-mistakes": {
+      const questions = study.questions.filter((_, index) => !study.answers[index].correct);
+      study = { test: false, review: true, questions, answers: [], index: 0, feedback: null, order: [], streak: 0, bestStreak: 0 };
+      renderQuestion();
+      elements.content.querySelector("form input, form button").focus();
+      break;
+    }
   }
 });
 
